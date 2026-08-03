@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misión Cartesiana - Cayetano</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <div id="pantalla-login">
+        <h1>Misión Cartesiana</h1>
+        <h2>Bachillerato Cayetano</h2>
+        <p>Ingresa tu nombre para entrar a la batalla:</p>
+        <input type="text" id="inputNombre" placeholder="Tu nombre o apellido">
+        <button id="btnEntrar">ENTRAR AL JUEGO</button>
+    </div>
+
+    <div id="pantalla-juego" style="display: none;">
+        <div id="contenedor">
+            <h1>BACHILLERATO CAYETANO</h1>
+            
+            <div id="contenedor-plano">
+                <canvas id="plano" width="600" height="400"></canvas>
+                <p id="mensaje" style="opacity: 1;">Esperando conexión...</p>
+                <div id="alerta-central" style="display: none;">
+                    <h2 id="texto-alerta">¡ACERTASTE!</h2>
+                </div>
+            </div>
+            
+            <div id="controles">
+                <input type="text" id="inputCoordenadas" placeholder="Ej: (3,-2)">
+                <button id="btnDisparar">DISPARAR</button>
+            </div>
+        </div>
+
+        <div id="contenedor-ranking">
+            <h3>🏆 RANKING EN VIVO</h3>
+            <ul id="listaRanking"></ul>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- EL TRUCO ESTÁ AQUÍ (?v=2) -->
+    <script src="juego.js?v=2"></script> 
+</body>
+</html>
