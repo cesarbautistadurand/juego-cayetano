@@ -5,17 +5,22 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 #pantalla-login {
     background-color: #A6192E;
-    padding: 40px;
+    padding: 30px;
     border-radius: 15px;
     border: 4px solid #F7B232;
     text-align: center;
     box-shadow: 0px 10px 30px rgba(0,0,0,0.5);
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
 }
 
 #pantalla-login input {
@@ -23,60 +28,74 @@ body {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    width: 80%;
 }
 
 #pantalla-juego {
     display: flex;
     gap: 20px;
     align-items: flex-start;
+    flex-wrap: wrap; /* Permite que baje el ranking si la pantalla es pequeña */
+    justify-content: center;
+    width: 100%;
+    max-width: 950px;
 }
 
 #contenedor {
     background-color: #A6192E; 
-    padding: 30px;
+    padding: 20px;
     border-radius: 15px;
     border: 4px solid #F7B232;
     text-align: center;
     box-shadow: 0px 10px 30px rgba(0,0,0,0.5);
+    width: 100%;
+    max-width: 640px;
+    box-sizing: border-box;
 }
 
-h1 { font-size: 24px; margin: 0 0 15px 0; }
+h1 { font-size: 22px; margin: 0 0 15px 0; }
 h2 { font-size: 18px; color: #F7B232; margin: 0 0 15px 0; }
 h3 { color: #F7B232; margin-top: 0; text-align: center; }
 
 #contenedor-plano {
     position: relative;
     display: inline-block;
+    width: 100%;
     margin-bottom: 15px;
 }
 
+/* EL CANVAS AHORA ES RESPONSIVO PARA CELULARES */
 canvas {
     background-color: #0F1428; 
     border: 2px solid #FFFFFF;
     border-radius: 5px;
     display: block;
-    transition: transform 0.05s; /* Efecto de temblor */
+    width: 100%; 
+    max-width: 600px;
+    height: auto;
+    transition: transform 0.05s;
 }
 
-/* MENSAJE EN EL CENTRO EXACTO QUE SE DESVANECE */
 #mensaje {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: rgba(15, 20, 40, 0.95);
-    padding: 15px 30px;
+    padding: 12px 20px;
     border-radius: 8px;
     border: 2px solid #F7B232;
     font-weight: bold;
-    font-size: 22px;
+    font-size: 18px;
     text-align: center;
     z-index: 5;
     box-shadow: 0 5px 15px rgba(0,0,0,0.6);
     pointer-events: none; 
-    opacity: 0; /* Controlado por JavaScript */
+    opacity: 0; 
     transition: opacity 0.4s ease;
     margin: 0;
+    width: 85%;
+    box-sizing: border-box;
 }
 
 #alerta-central {
@@ -94,31 +113,35 @@ canvas {
 }
 
 #texto-alerta {
-    font-size: 32px;
+    font-size: 26px;
     text-align: center;
     text-shadow: 3px 3px 6px #000000;
     line-height: 1.5;
+    padding: 0 10px;
 }
 
 #controles {
     display: flex;
     justify-content: center;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 input {
     padding: 10px;
-    font-size: 18px;
+    font-size: 16px;
     border-radius: 5px;
     border: 2px solid #F7B232;
     text-align: center;
-    width: 200px;
+    width: 180px;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 button {
     background-color: #F7B232;
     color: #000000;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     border: none;
     border-radius: 5px;
@@ -131,11 +154,13 @@ button:hover { background-color: #FFFFFF; }
 
 #contenedor-ranking {
     background-color: #0F1428;
-    padding: 20px;
+    padding: 15px;
     border-radius: 15px;
     border: 4px solid #F7B232;
-    width: 250px;
-    min-height: 300px;
+    width: 100%;
+    max-width: 300px;
+    min-height: 200px;
+    box-sizing: border-box;
 }
 
 #listaRanking {
@@ -146,10 +171,10 @@ button:hover { background-color: #FFFFFF; }
 
 #listaRanking li {
     background-color: #A6192E;
-    margin-bottom: 10px;
-    padding: 10px;
+    margin-bottom: 8px;
+    padding: 8px;
     border-radius: 5px;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 14px;
     border-left: 5px solid #F7B232;
 }
