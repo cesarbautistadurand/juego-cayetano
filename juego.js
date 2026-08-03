@@ -24,6 +24,10 @@ let mensajeTimer;
 let ultimoDisparoX = 0;
 let ultimoDisparoY = 0;
 
+// CARGAR LA IMAGEN DE LA MASCOTA
+const imgMascota = new Image();
+imgMascota.src = 'mascota.png';
+
 function mostrarMensaje(texto, color) {
     mensaje.innerText = texto;
     mensaje.style.color = color;
@@ -81,16 +85,16 @@ function dibujarPlano() {
     ctx.fillText("Y", centroX - 25, 20);
 }
 
+// NUEVA FUNCIÓN: Dibuja la mascota en lugar de la nave
 function dibujarAlien(x, y) {
     const px = centroX + (x * escala);
     const py = centroY - (y * escala);
-    ctx.fillStyle = "#5F1455"; 
-    ctx.beginPath(); ctx.ellipse(px, py, 15, 8, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = "#48dbfb"; 
-    ctx.beginPath(); ctx.arc(px, py - 5, 8, Math.PI, 0); ctx.fill();
+    const tamaño = 45; // Tamaño de la imagen en píxeles dentro del plano
+    
+    // Dibujamos la imagen centrada exactamente en la coordenada (px, py)
+    ctx.drawImage(imgMascota, px - tamaño / 2, py - tamaño / 2, tamaño, tamaño);
 }
 
-// Eventos de cuenta regresiva y estados
 socket.on('inicioCountdown', (segundos) => {
     dibujarPlano();
     textoAlerta.innerHTML = `⚠️ PREPÁRENSE<br><span style="font-size: 50px; color: #F7B232;">${segundos}</span>`;
@@ -130,7 +134,7 @@ socket.on('impactoCorrecto', (datos) => {
         textoAlerta.innerHTML = "¡ACERTASTE!<br>+100 Puntos";
         textoAlerta.style.color = "#50C878";
     } else {
-        textoAlerta.innerHTML = `¡SE TE ADELANTARON!<br><span style="color:#FFFFFF; font-size:22px;">${datos.nombreGanador.toUpperCase()} destruyó la nave</span>`;
+        textoAlerta.innerHTML = `¡SE TE ADELANTARON!<br><span style="color:#FFFFFF; font-size:22px;">${datos.nombreGanador.toUpperCase()} atrapó la mascota</span>`;
         textoAlerta.style.color = "#F7B232"; 
     }
     
