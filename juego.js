@@ -24,7 +24,6 @@ let mensajeTimer;
 let ultimoDisparoX = 0;
 let ultimoDisparoY = 0;
 
-// CARGAR LA IMAGEN DE LA MASCOTA
 const imgMascota = new Image();
 imgMascota.src = 'mascota.png';
 
@@ -85,13 +84,10 @@ function dibujarPlano() {
     ctx.fillText("Y", centroX - 25, 20);
 }
 
-// NUEVA FUNCIÓN: Dibuja la mascota en lugar de la nave
 function dibujarAlien(x, y) {
     const px = centroX + (x * escala);
     const py = centroY - (y * escala);
-    const tamaño = 45; // Tamaño de la imagen en píxeles dentro del plano
-    
-    // Dibujamos la imagen centrada exactamente en la coordenada (px, py)
+    const tamaño = 45; 
     ctx.drawImage(imgMascota, px - tamaño / 2, py - tamaño / 2, tamaño, tamaño);
 }
 
