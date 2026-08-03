@@ -21,10 +21,11 @@ let alienX = 0;
 let alienY = 0;
 let miNombre = "";
 let mensajeTimer; 
-let ultimoDisparoX = 0;
-let ultimoDisparoY = 0;
 
+// CARGA SEGURA DE LA IMAGEN DE LA MASCOTA
 const imgMascota = new Image();
+let mascotaCargada = false;
+imgMascota.onload = () => { mascotaCargada = true; };
 imgMascota.src = 'mascota.png';
 
 function mostrarMensaje(texto, color) {
@@ -41,6 +42,8 @@ btnEntrar.addEventListener("click", () => {
         miNombre = nombre;
         pantallaLogin.style.display = "none";
         pantallaJuego.style.display = "flex";
+        mensaje.style.opacity = "0";
+        dibujarPlano();
         socket.emit('registrarJugador', miNombre);
     }
 });
@@ -88,7 +91,16 @@ function dibujarAlien(x, y) {
     const px = centroX + (x * escala);
     const py = centroY - (y * escala);
     const tamaño = 45; 
-    ctx.drawImage(imgMascota, px - tamaño / 2, py - tamaño / 2, tamaño, tamaño);
+    
+    if (mascotaCargada) {
+        ctx.drawImage(imgMascota, px - tamaño / 2, py - tamaño / 2, tamaño, tamaño);
+    } else {
+        // Dibuja un círculo de respaldo mientras carga la imagen
+        ctx.fillStyle = "#F7B232";
+        ctx.beginPath();
+        ctx.arc(px, py, 15, 0, Math.PI * 2);
+        ctx.fill();
+    }
 }
 
 socket.on('inicioCountdown', (segundos) => {
@@ -185,9 +197,6 @@ btnDisparar.addEventListener("click", () => {
     
     const intentoX = parseInt(valores[0]);
     const intentoY = parseInt(valores[1]);
-
-    ultimoDisparoX = intentoX;
-    ultimoDisparoY = intentoY;
 
     socket.emit('disparo', { x: intentoX, y: intentoY });
     inputCoords.value = "";
