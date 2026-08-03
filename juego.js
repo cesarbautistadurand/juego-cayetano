@@ -12,6 +12,7 @@ const mensaje = document.getElementById("mensaje");
 const listaRanking = document.getElementById("listaRanking");
 const alertaCentral = document.getElementById("alerta-central");
 const textoAlerta = document.getElementById("texto-alerta");
+const reloj = document.getElementById("panel-reloj");
 
 const centroX = canvas.width / 2;
 const centroY = canvas.height / 2;
@@ -20,13 +21,15 @@ let alienX = 0;
 let alienY = 0;
 let miNombre = "";
 let mensajeTimer; 
+let ultimoDisparoX = 0;
+let ultimoDisparoY = 0;
 
 function mostrarMensaje(texto, color) {
     mensaje.innerText = texto;
     mensaje.style.color = color;
     mensaje.style.opacity = "1"; 
     clearTimeout(mensajeTimer);
-    mensajeTimer = setTimeout(() => { mensaje.style.opacity = "0"; }, 3500);
+    mensajeTimer = setTimeout(() => { mensaje.style.opacity = "0"; }, 3000);
 }
 
 btnEntrar.addEventListener("click", () => {
@@ -87,12 +90,39 @@ function dibujarAlien(x, y) {
     ctx.beginPath(); ctx.arc(px, py - 5, 8, Math.PI, 0); ctx.fill();
 }
 
-socket.on('nuevoAlien', (coordenadas) => {
+// Eventos de cuenta regresiva y estados
+socket.on('inicioCountdown', (segundos) => {
+    dibujarPlano();
+    textoAlerta.innerHTML = `⚠️ PREPÁRENSE<br><span style="font-size: 50px; color: #F7B232;">${segundos}</span>`;
+    alertaCentral.style.display = "flex";
+});
+
+socket.on('actualizarCountdown', (segundos) => {
+    if (segundos > 0) {
+        textoAlerta.innerHTML = `⚠️ COMIENZA EN<br><span style="font-size: 50px; color: #F7B232;">${segundos}</span>`;
+        alertaCentral.style.display = "flex";
+    } else {
+        textoAlerta.innerHTML = `<span style="font-size: 45px; color: #50C878;">¡A BATALLAR!</span>`;
+        setTimeout(() => {
+            alertaCentral.style.display = "none";
+        }, 1000);
+    }
+});
+
+socket.on('comenzarPartida', (coordenadas) => {
     alienX = coordenadas.x;
     alienY = coordenadas.y;
+    alertaCentral.style.display = "none";
     dibujarPlano();
     dibujarAlien(alienX, alienY);
-    mostrarMensaje("¡Apunta rápido! Ingresa X,Y", "#FFFFFF");
+    mostrarMensaje("¡Objetivo detectado! ¡Apunta rápido!", "#FFFFFF");
+});
+
+socket.on('actualizarReloj', (segundosRestantes) => {
+    let minutos = Math.floor(segundosRestantes / 60);
+    let segundos = segundosRestantes % 60;
+    let formatoSegundos = segundos < 10 ? "0" + segundos : segundos;
+    reloj.innerText = `⏱️ 0${minutos}:${formatoSegundos}`;
 });
 
 socket.on('impactoCorrecto', (datos) => {
@@ -100,11 +130,13 @@ socket.on('impactoCorrecto', (datos) => {
         textoAlerta.innerHTML = "¡ACERTASTE!<br>+100 Puntos";
         textoAlerta.style.color = "#50C878";
     } else {
-        textoAlerta.innerHTML = `¡SE TE ADELANTARON!<br><span style="color:#FFFFFF; font-size:24px;">${datos.nombreGanador.toUpperCase()} destruyó la nave</span>`;
+        textoAlerta.innerHTML = `¡SE TE ADELANTARON!<br><span style="color:#FFFFFF; font-size:22px;">${datos.nombreGanador.toUpperCase()} destruyó la nave</span>`;
         textoAlerta.style.color = "#F7B232"; 
     }
+    
     alertaCentral.style.display = "flex";
     mensaje.style.opacity = "0"; 
+    
     alienX = datos.nuevoX;
     alienY = datos.nuevoY;
     
@@ -113,11 +145,17 @@ socket.on('impactoCorrecto', (datos) => {
         dibujarPlano();
         dibujarAlien(alienX, alienY);
         mostrarMensaje("¡Nuevo objetivo detectado!", "#FFFFFF");
-    }, 2000);
+    }, 1500);
+});
+
+socket.on('finPartida', (datos) => {
+    textoAlerta.innerHTML = `🏁 ¡FIN DE LA RONDA! 🏁<br><br>🏆 Ganador: <span style="color:#50C878;">${datos.ganador.toUpperCase()}</span><br><span style="font-size:22px; color:#F7B232;">Puntaje: ${datos.puntaje} pts</span>`;
+    textoAlerta.style.color = "#FFFFFF";
+    alertaCentral.style.display = "flex";
 });
 
 socket.on('fallo', (intento) => {
-    mostrarMensaje(`Disparaste a X:${intento.x}, Y:${intento.y}. ¡Sigue intentando!`, "#F7B232");
+    mostrarMensaje(`Disparaste a X:${intento.x}, Y:${intento.y}. ¡Fallaste!`, "#F7B232");
     canvas.style.transform = "translateX(10px)";
     setTimeout(() => canvas.style.transform = "translateX(-10px)", 50);
     setTimeout(() => canvas.style.transform = "translateX(10px)", 100);
@@ -147,6 +185,9 @@ btnDisparar.addEventListener("click", () => {
     
     const intentoX = parseInt(valores[0]);
     const intentoY = parseInt(valores[1]);
+
+    ultimoDisparoX = intentoX;
+    ultimoDisparoY = intentoY;
 
     socket.emit('disparo', { x: intentoX, y: intentoY });
     inputCoords.value = "";
