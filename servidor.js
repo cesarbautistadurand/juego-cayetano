@@ -9,9 +9,9 @@ let jugadores = {};
 let alienX = 0;
 let alienY = 0;
 
-let estadoJuego = 'esperando'; // 'esperando', 'countdown', 'jugando', 'terminado'
-let segundosRestantes = 120;   // 2 minutos de partida
-let segundosCountdown = 10;    // 10 segundos de espera inicial
+let estadoJuego = 'esperando'; 
+let segundosRestantes = 120;   
+let segundosCountdown = 10;    
 let intervaloJuego = null;
 let intervaloCountdown = null;
 
@@ -90,10 +90,10 @@ io.on('connection', (socket) => {
         jugadores[socket.id] = { nombre: nombreAlumno, puntaje: 0 };
         enviarRanking();
 
-        if (Object.keys(jugadores).length === 1 && estadoJuego === 'esperando') {
+        if (estadoJuego === 'esperando') {
             iniciarCountdown();
         } else if (estadoJuego === 'countdown') {
-            socket.emit('actualizarCountdown', segundosCountdown);
+            socket.emit('inicioCountdown', segundosCountdown);
         } else if (estadoJuego === 'jugando') {
             socket.emit('comenzarPartida', { x: alienX, y: alienY });
         } else if (estadoJuego === 'terminado') {
@@ -132,7 +132,8 @@ io.on('connection', (socket) => {
     });
 });
 
-const PUERTO = 3000;
+// PUERTO COMPATIBLE CON RENDER
+const PUERTO = process.env.PORT || 3000;
 http.listen(PUERTO, () => {
     console.log(`¡Servidor activado! Escuchando en el puerto ${PUERTO}`);
 });
