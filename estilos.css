@@ -1,5 +1,5 @@
 body {
-    background-color: #5F1455; /* Morado Cayetano */
+    background-color: #5F1455; 
     color: #FFFFFF;
     font-family: 'Arial', sans-serif;
     display: flex;
@@ -35,7 +35,7 @@ body {
     display: flex;
     gap: 20px;
     align-items: flex-start;
-    flex-wrap: wrap; /* Permite que baje el ranking si la pantalla es pequeña */
+    flex-wrap: wrap;
     justify-content: center;
     width: 100%;
     max-width: 950px;
@@ -53,9 +53,26 @@ body {
     box-sizing: border-box;
 }
 
-h1 { font-size: 22px; margin: 0 0 15px 0; }
+#cabecera-juego {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+h1 { font-size: 20px; margin: 0; }
 h2 { font-size: 18px; color: #F7B232; margin: 0 0 15px 0; }
 h3 { color: #F7B232; margin-top: 0; text-align: center; }
+
+#panel-reloj {
+    background-color: #0F1428;
+    color: #F7B232;
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 2px solid #F7B232;
+    font-weight: bold;
+    font-size: 16px;
+}
 
 #contenedor-plano {
     position: relative;
@@ -64,7 +81,6 @@ h3 { color: #F7B232; margin-top: 0; text-align: center; }
     margin-bottom: 15px;
 }
 
-/* EL CANVAS AHORA ES RESPONSIVO PARA CELULARES */
 canvas {
     background-color: #0F1428; 
     border: 2px solid #FFFFFF;
@@ -113,10 +129,10 @@ canvas {
 }
 
 #texto-alerta {
-    font-size: 26px;
+    font-size: 30px;
     text-align: center;
     text-shadow: 3px 3px 6px #000000;
-    line-height: 1.5;
+    line-height: 1.4;
     padding: 0 10px;
 }
 
