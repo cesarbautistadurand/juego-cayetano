@@ -23,22 +23,31 @@ body {
     box-sizing: border-box;
 }
 
-#pantalla-login input {
-    margin-bottom: 15px;
-    display: block;
+/* SIMETRÍA PERFECTA EN EL LOGIN */
+#pantalla-login input,
+#pantalla-login button {
+    width: 85%;
+    max-width: 280px;
     margin-left: auto;
     margin-right: auto;
-    width: 80%;
+    display: block;
+    box-sizing: border-box;
+}
+
+#pantalla-login input {
+    margin-bottom: 15px;
+}
+
+#btnEntrar {
+    margin-bottom: 10px;
 }
 
 #btnInstrucciones {
     background-color: #FFFFFF;
     color: #5F1455;
-    margin-top: 12px;
-    width: 80%;
 }
 
-/* ESTILOS DEL MODAL Y LA DEMO ANIMADA */
+/* ESTILOS DEL MODAL */
 .modal {
     display: none;
     position: fixed;
