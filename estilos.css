@@ -24,11 +24,93 @@ body {
 }
 
 #pantalla-login input {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     display: block;
     margin-left: auto;
     margin-right: auto;
     width: 80%;
+}
+
+#btnInstrucciones {
+    background-color: #FFFFFF;
+    color: #5F1455;
+    margin-top: 12px;
+    width: 80%;
+}
+
+/* ESTILOS DEL MODAL DE INSTRUCCIONES */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.contenido-modal {
+    background-color: #A6192E;
+    border: 4px solid #F7B232;
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 420px;
+    width: 100%;
+    text-align: left;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    box-sizing: border-box;
+}
+
+.contenido-modal h3 {
+    text-align: center;
+    color: #F7B232;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.contenido-modal p {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.demo-contenedor {
+    background-color: #0F1428;
+    border: 2px solid #F7B232;
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.demo-texto {
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.demo-caja {
+    background-color: #1a2238;
+    border: 1px dashed #F7B232;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 11px;
+    min-width: 80px;
+}
+
+#cerrarModal {
+    background-color: #F7B232;
+    color: #000000;
+    width: 100%;
+    font-weight: 700;
 }
 
 #pantalla-juego {
@@ -92,7 +174,6 @@ canvas {
     transition: transform 0.05s;
 }
 
-/* CAJA DE MENSAJE MÁS CHICA (ANCHO AUTOMÁTICO Y MENOS PADDING) */
 #mensaje {
     position: absolute;
     top: 50%;
