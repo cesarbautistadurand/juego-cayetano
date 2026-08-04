@@ -39,20 +39,18 @@ cerrarModal.addEventListener("click", () => {
     modalInstrucciones.style.display = "none";
 });
 
-// NUEVO DISEÑO DE MIRA TÁCTICA PROFESIONAL
+// MIRA TÁCTICA REDUCIDA Y PROPORCIONAL
 function dibujarMira(targetCtx, x, y) {
     targetCtx.save();
     targetCtx.strokeStyle = "#00FF66"; // Verde neón táctico
-    targetCtx.lineWidth = 1.5;
+    targetCtx.lineWidth = 1;
     
-    let r = 7;
-    // Círculo exterior de la mira
+    let r = 3.5; // Radio pequeño
     targetCtx.beginPath();
     targetCtx.arc(x, y, r, 0, Math.PI * 2);
     targetCtx.stroke();
     
-    // Líneas de la cruz (arriba, abajo, izquierda, derecha)
-    let len = 4;
+    let len = 2; // Líneas de la cruz cortas
     targetCtx.beginPath();
     targetCtx.moveTo(x, y - r - len); targetCtx.lineTo(x, y - r);
     targetCtx.moveTo(x, y + r); targetCtx.lineTo(x, y + r + len);
@@ -60,15 +58,15 @@ function dibujarMira(targetCtx, x, y) {
     targetCtx.moveTo(x + r, y); targetCtx.lineTo(x + r + len, y);
     targetCtx.stroke();
     
-    // Punto central blanco brillante
+    // Punto central blanco muy fino
     targetCtx.fillStyle = "#FFFFFF";
     targetCtx.beginPath();
-    targetCtx.arc(x, y, 1.5, 0, Math.PI * 2);
+    targetCtx.arc(x, y, 1, 0, Math.PI * 2);
     targetCtx.fill();
     targetCtx.restore();
 }
 
-// ANIMACIÓN DE DEMOSTRACIÓN CON LA NUEVA MIRA EN EL CUELLO
+// ANIMACIÓN DE DEMOSTRACIÓN CON LA MIRA PEQUEÑA EN EL CUELLO
 const demoCanvas = document.getElementById("demoCanvas");
 if (demoCanvas) {
     const dCtx = demoCanvas.getContext("2d");
@@ -79,7 +77,6 @@ if (demoCanvas) {
             const dcx = demoCanvas.width / 2;
             const dcy = demoCanvas.height / 2;
 
-            // Dibujar ejes cartesianos en miniatura
             dCtx.strokeStyle = "#F7B232";
             dCtx.lineWidth = 1;
             dCtx.beginPath();
@@ -89,12 +86,10 @@ if (demoCanvas) {
             dCtx.lineTo(dcx, demoCanvas.height);
             dCtx.stroke();
 
-            // Texto de coordenadas simulado
             dCtx.fillStyle = "#FFFFFF";
             dCtx.font = "9px Poppins, Arial";
             dCtx.fillText("(3 ; -2)", dcx + 12, dcy + 22);
 
-            // Posición de la mascota en la demo
             let px = dcx + 30;
             let py = dcy - 18;
             let tamañoDemo = 36;
@@ -108,7 +103,6 @@ if (demoCanvas) {
                 dCtx.fill();
             }
 
-            // Aplicar la nueva mira táctica en el cuello
             dibujarMira(dCtx, px, py);
         }
         requestAnimationFrame(animarDemo);
@@ -175,7 +169,7 @@ function dibujarPlano() {
     ctx.fillText("Y", centroX - 25, 20);
 }
 
-// DIBUJAR MASCOTA Y LA NUEVA MIRA TÁCTICA EN EL JUEGO PRINCIPAL
+// DIBUJAR MASCOTA Y LA MIRA REDUCIDA EN EL JUEGO PRINCIPAL
 function dibujarAlien(x, y) {
     const px = centroX + (x * escala);
     const py = centroY - (y * escala);
@@ -190,7 +184,6 @@ function dibujarAlien(x, y) {
         ctx.fill();
     }
 
-    // Aplicar la mira táctica profesional en el cuello de la mascota
     dibujarMira(ctx, px, py);
 }
 
