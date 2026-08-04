@@ -39,6 +39,13 @@ cerrarModal.addEventListener("click", () => {
     modalInstrucciones.style.display = "none";
 });
 
+function formatearTiempo(segundosTotales) {
+    let minutos = Math.floor(segundosTotales / 60);
+    let segundos = segundosTotales % 60;
+    let formatoSegundos = segundos < 10 ? "0" + segundos : segundos;
+    return `0${minutos}:${formatoSegundos}`;
+}
+
 // MIRA TÁCTICA REDUCIDA Y PROPORCIONAL
 function dibujarMira(targetCtx, x, y) {
     targetCtx.save();
@@ -193,13 +200,13 @@ function dibujarAlien(x, y) {
 
 socket.on('inicioCountdown', (segundos) => {
     dibujarPlano();
-    textoAlerta.innerHTML = `⚠️ PREPÁRENSE<br><span style="font-size: 45px; color: #F7B232;">${segundos}</span>`;
+    textoAlerta.innerHTML = `⚠️ PREPÁRENSE<br><span style="font-size: 45px; color: #F7B232;">${formatearTiempo(segundos)}</span>`;
     alertaCentral.style.display = "flex";
 });
 
 socket.on('actualizarCountdown', (segundos) => {
     if (segundos > 0) {
-        textoAlerta.innerHTML = `⚠️ COMIENZA EN<br><span style="font-size: 45px; color: #F7B232;">${segundos}</span>`;
+        textoAlerta.innerHTML = `⚠️ COMIENZA EN<br><span style="font-size: 45px; color: #F7B232;">${formatearTiempo(segundos)}</span>`;
         alertaCentral.style.display = "flex";
     } else {
         textoAlerta.innerHTML = `<span style="font-size: 35px; color: #50C878;">¡INICIAR PARTIDA!</span>`;
@@ -219,10 +226,7 @@ socket.on('comenzarPartida', (coordenadas) => {
 });
 
 socket.on('actualizarReloj', (segundosRestantes) => {
-    let minutos = Math.floor(segundosRestantes / 60);
-    let segundos = segundosRestantes % 60;
-    let formatoSegundos = segundos < 10 ? "0" + segundos : segundos;
-    reloj.innerText = `⏱️ 0${minutos}:${formatoSegundos}`;
+    reloj.innerText = `⏱️ ${formatearTiempo(segundosRestantes)}`;
 });
 
 socket.on('impactoCorrecto', (datos) => {
