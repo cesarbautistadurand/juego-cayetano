@@ -23,7 +23,6 @@ body {
     box-sizing: border-box;
 }
 
-/* SIMETRÍA PERFECTA EN EL LOGIN */
 #pantalla-login input,
 #pantalla-login button {
     width: 85%;
@@ -47,7 +46,6 @@ body {
     color: #5F1455;
 }
 
-/* ESTILOS DEL MODAL */
 .modal {
     display: none;
     position: fixed;
