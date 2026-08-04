@@ -71,17 +71,18 @@ function iniciarJuego() {
 function finalizarJuego() {
     estadoJuego = 'terminado';
     let listaOrdenada = Object.values(jugadores).sort((a, b) => b.puntaje - a.puntaje);
-    let ganador = listaOrdenada.length > 0 ? listaOrdenada[0] : { nombre: 'Nadie', puntaje: 0 };
+    
+    // Enviamos el top 3 para el podio
+    io.emit('finPartida', { ranking: listaOrdenada.slice(0, 3) });
 
-    io.emit('finPartida', { ganador: ganador.nombre, puntaje: ganador.puntaje });
-
+    // El podio se muestra durante 1 minuto (60,000 milisegundos) antes de la revancha
     setTimeout(() => {
         if (Object.keys(jugadores).length > 0) {
             iniciarCountdown();
         } else {
             estadoJuego = 'esperando';
         }
-    }, 6000);
+    }, 60000);
 }
 
 io.on('connection', (socket) => {
@@ -132,7 +133,6 @@ io.on('connection', (socket) => {
     });
 });
 
-// PUERTO COMPATIBLE CON RENDER
 const PUERTO = process.env.PORT || 3000;
 http.listen(PUERTO, () => {
     console.log(`¡Servidor activado! Escuchando en el puerto ${PUERTO}`);
