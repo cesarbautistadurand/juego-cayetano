@@ -19,7 +19,7 @@
         <button id="btnInstrucciones">📖 ¿CÓMO JUGAR?</button>
     </div>
 
-    <!-- MODAL DE INSTRUCCIONES -->
+    <!-- MODAL DE INSTRUCCIONES ACTUALIZADO -->
     <div id="modalInstrucciones" class="modal">
         <div class="contenido-modal">
             <h3>INSTRUCCIONES</h3>
@@ -30,12 +30,13 @@
                 4. Tienes 2 minutos para acumular puntos y entrar al Top 10.
             </p>
             
-            <!-- Demostración visual con la mascota en el cuadrante correcto -->
+            <!-- Demostración visual indicando flexibilidad de formatos -->
             <div class="demo-contenedor">
                 <div class="demo-texto">
-                    <b>Ejemplo práctico:</b><br>
-                    Usa el punto y coma (<b>;</b>)<br>
-                    Formato: <span style="color: #50C878;">3;-2</span>
+                    <b>Formatos de coordenadas:</b><br>
+                    Usa <b>;</b>, <b>,</b>, espacio o sin símbolos.<br>
+                    Ejemplos:<br>
+                    <span style="color: #50C878;">3;-2</span> | <span style="color: #50C878;">3, -2</span> | <span style="color: #50C878;">3 -2</span>
                 </div>
                 <canvas id="demoCanvas" width="130" height="100"></canvas>
             </div>
@@ -75,6 +76,6 @@
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="juego.js?v=19"></script>
+    <script src="juego.js?v=20"></script>
 </body>
 </html>
