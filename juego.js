@@ -45,12 +45,12 @@ function dibujarMira(targetCtx, x, y) {
     targetCtx.strokeStyle = "#00FF66"; // Verde neón táctico
     targetCtx.lineWidth = 1;
     
-    let r = 3.5; // Radio pequeño
+    let r = 3.5;
     targetCtx.beginPath();
     targetCtx.arc(x, y, r, 0, Math.PI * 2);
     targetCtx.stroke();
     
-    let len = 2; // Líneas de la cruz cortas
+    let len = 2;
     targetCtx.beginPath();
     targetCtx.moveTo(x, y - r - len); targetCtx.lineTo(x, y - r);
     targetCtx.moveTo(x, y + r); targetCtx.lineTo(x, y + r + len);
@@ -58,7 +58,6 @@ function dibujarMira(targetCtx, x, y) {
     targetCtx.moveTo(x + r, y); targetCtx.lineTo(x + r + len, y);
     targetCtx.stroke();
     
-    // Punto central blanco muy fino
     targetCtx.fillStyle = "#FFFFFF";
     targetCtx.beginPath();
     targetCtx.arc(x, y, 1, 0, Math.PI * 2);
@@ -66,7 +65,7 @@ function dibujarMira(targetCtx, x, y) {
     targetCtx.restore();
 }
 
-// ANIMACIÓN DE DEMOSTRACIÓN CON LA MIRA PEQUEÑA EN EL CUELLO
+// ANIMACIÓN DE DEMOSTRACIÓN: UBICADA CORRECTAMENTE EN EL CUARTO CUADRANTE PARA (3 ; -2)
 const demoCanvas = document.getElementById("demoCanvas");
 if (demoCanvas) {
     const dCtx = demoCanvas.getContext("2d");
@@ -86,16 +85,22 @@ if (demoCanvas) {
             dCtx.lineTo(dcx, demoCanvas.height);
             dCtx.stroke();
 
+            // Texto de coordenadas simulado ubicado inteligentemente para no estorbar
             dCtx.fillStyle = "#FFFFFF";
             dCtx.font = "9px Poppins, Arial";
-            dCtx.fillText("(3 ; -2)", dcx + 12, dcy + 22);
+            dCtx.fillText("(3 ; -2)", dcx - 38, dcy - 12);
 
-            let px = dcx + 30;
-            let py = dcy - 18;
+            // Coordenadas exactas en la demo: X = 3, Y = -2 (Cuadrante IV: Derecha y Abajo)
+            let demoX = 3;
+            let demoY = -2;
+            let escalaDemo = 10;
+            let px = dcx + (demoX * escalaDemo);
+            let py = dcy - (demoY * escalaDemo); // Al ser Y negativo, esto baja en el canvas
+
             let tamañoDemo = 36;
 
             if (mascotaCargada) {
-                dCtx.drawImage(imgMascota, px - tamañoDemo / 2, py - 12, tamañoDemo, tamañoDemo);
+                dCtx.drawImage(imgMascota, px - tamañoDemo / 2, py - 16, tamañoDemo, tamañoDemo);
             } else {
                 dCtx.fillStyle = "#50C878";
                 dCtx.beginPath();
@@ -169,7 +174,7 @@ function dibujarPlano() {
     ctx.fillText("Y", centroX - 25, 20);
 }
 
-// DIBUJAR MASCOTA Y LA MIRA REDUCIDA EN EL JUEGO PRINCIPAL
+// DIBUJAR MASCOTA Y LA MIRA EN EL JUEGO PRINCIPAL
 function dibujarAlien(x, y) {
     const px = centroX + (x * escala);
     const py = centroY - (y * escala);
