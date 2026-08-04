@@ -81,7 +81,6 @@ body {
     font-size: 20px;
 }
 
-/* LETRA AGRANDADA PARA LAS INSTRUCCIONES */
 .contenido-modal p {
     font-size: 14.5px;
     line-height: 1.6;
@@ -100,7 +99,6 @@ body {
     margin-bottom: 15px;
 }
 
-/* LETRA AGRANDADA PARA EL TEXTO DEL EJEMPLO */
 .demo-texto {
     font-size: 12px;
     line-height: 1.5;
@@ -261,6 +259,7 @@ button {
 
 button:hover { background-color: #FFFFFF; }
 
+/* RANKING SIMÉTRICO CON SCROLL INTERNO PARA MÚLTIPLES ALUMNOS */
 #contenedor-ranking {
     background-color: #0F1428;
     padding: 15px;
@@ -268,7 +267,9 @@ button:hover { background-color: #FFFFFF; }
     border: 4px solid #F7B232;
     width: 100%;
     max-width: 300px;
-    min-height: 200px;
+    max-height: 500px;
+    display: flex;
+    flex-direction: column;
     box-sizing: border-box;
 }
 
@@ -276,6 +277,8 @@ button:hover { background-color: #FFFFFF; }
     list-style-type: none;
     padding: 0;
     margin: 0;
+    overflow-y: auto;
+    max-height: 400px;
 }
 
 #listaRanking li {
