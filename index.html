@@ -16,12 +16,10 @@
         <p>Ingresa tu nombre para iniciar la partida:</p>
         <input type="text" id="inputNombre" placeholder="Tu nombre">
         <button id="btnEntrar">ENTRAR AL JUEGO</button>
-        
-        <!-- Botón de Instrucciones -->
         <button id="btnInstrucciones">📖 ¿CÓMO JUGAR?</button>
     </div>
 
-    <!-- MODAL DE INSTRUCCIONES CON ANIMACIÓN EN MOVIMIENTO -->
+    <!-- MODAL DE INSTRUCCIONES -->
     <div id="modalInstrucciones" class="modal">
         <div class="contenido-modal">
             <h3>INSTRUCCIONES</h3>
@@ -32,14 +30,13 @@
                 4. Tienes 2 minutos para acumular puntos y entrar al Top 10.
             </p>
             
-            <!-- Demostración en movimiento -->
+            <!-- Demostración visual con coordenadas -->
             <div class="demo-contenedor">
                 <div class="demo-texto">
                     <b>Ejemplo práctico:</b><br>
                     Usa el punto y coma (<b>;</b>)<br>
-                    Ejemplo: <span style="color: #50C878;">3;-2</span>
+                    Formato: <span style="color: #50C878;">3;-2</span>
                 </div>
-                <!-- Canvas animado -->
                 <canvas id="demoCanvas" width="130" height="100"></canvas>
             </div>
 
@@ -78,6 +75,6 @@
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="juego.js?v=10"></script>
+    <script src="juego.js?v=11"></script>
 </body>
 </html>
