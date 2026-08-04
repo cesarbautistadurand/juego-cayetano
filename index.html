@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Misión Cartesiana - Cayetano</title>
+    <!-- Importar tipografía Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
@@ -12,8 +14,8 @@
     <div id="pantalla-login">
         <h1>Misión Cartesiana</h1>
         <h2>Bachillerato Cayetano</h2>
-        <p>Ingresa tu nombre para entrar a la batalla:</p>
-        <input type="text" id="inputNombre" placeholder="Tu nombre o apellido">
+        <p>Ingresa tu nombre completo para iniciar la partida:</p>
+        <input type="text" id="inputNombre" placeholder="Tu nombre completo">
         <button id="btnEntrar">ENTRAR AL JUEGO</button>
     </div>
 
@@ -36,7 +38,7 @@
                 </div>
             </div>
             
-            <!-- Controles (Ejemplo actualizado con ;) -->
+            <!-- Controles -->
             <div id="controles">
                 <input type="text" id="inputCoordenadas" placeholder="Ej: 3;-2">
                 <button id="btnDisparar">DISPARAR</button>
@@ -52,6 +54,6 @@
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="juego.js?v=6"></script>
+    <script src="juego.js?v=7"></script>
 </body>
 </html>
