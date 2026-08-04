@@ -65,18 +65,18 @@ function dibujarMira(targetCtx, x, y) {
     targetCtx.restore();
 }
 
-// ANIMACIÓN DE DEMOSTRACIÓN: NÍTIDA Y EN EL MISMO CUADRANTE (IV)
+// ANIMACIÓN DE DEMOSTRACIÓN NÍTIDA Y EN EL MISMO CUADRANTE (IV)
 const demoCanvas = document.getElementById("demoCanvas");
 if (demoCanvas) {
     const dCtx = demoCanvas.getContext("2d");
-    dCtx.scale(2, 2); // Escala para máxima nitidez (HD)
+    dCtx.scale(2, 2); 
     
     function animarDemo() {
         if (modalInstrucciones.style.display === "flex") {
             dCtx.clearRect(0, 0, 130, 100);
             
-            const dcx = 130 / 2; // 65
-            const dcy = 100 / 2; // 50
+            const dcx = 130 / 2; 
+            const dcy = 100 / 2; 
 
             dCtx.strokeStyle = "#F7B232";
             dCtx.lineWidth = 1;
@@ -87,7 +87,6 @@ if (demoCanvas) {
             dCtx.lineTo(dcx, 100);
             dCtx.stroke();
 
-            // Posición exacta en el cuarto cuadrante (X positivo, Y negativo)
             let demoX = 2.5;
             let demoY = -1.8;
             let escalaDemo = 14;
@@ -107,9 +106,8 @@ if (demoCanvas) {
 
             dibujarMira(dCtx, px, py);
 
-            // TEXTO (3 ; -2) COLOCADO EN EL MISMO CUADRANTE (IV), JUSTO AL LADO
             dCtx.fillStyle = "#FFFFFF";
-            dCtx.font = "8px Poppins, Arial";
+            dCtx.font = "8.5px Poppins, Arial";
             dCtx.fillText("(3 ; -2)", px - 12, py + 24);
         }
         requestAnimationFrame(animarDemo);
