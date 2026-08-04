@@ -40,6 +40,46 @@ cerrarModal.addEventListener("click", () => {
     modalInstrucciones.style.display = "none";
 });
 
+// ANIMACIÓN EN MOVIMIENTO PARA EL CANVAS DE DEMOSTRACIÓN
+const demoCanvas = document.getElementById("demoCanvas");
+if (demoCanvas) {
+    const dCtx = demoCanvas.getContext("2d");
+    let demoFrame = 0;
+    function animarDemo() {
+        if (modalInstrucciones.style.display === "flex") {
+            dCtx.clearRect(0, 0, demoCanvas.width, demoCanvas.height);
+            
+            // Mini ejes cartesianos
+            dCtx.strokeStyle = "#F7B232";
+            dCtx.lineWidth = 1;
+            dCtx.beginPath();
+            dCtx.moveTo(0, demoCanvas.height / 2);
+            dCtx.lineTo(demoCanvas.width, demoCanvas.height / 2);
+            dCtx.moveTo(demoCanvas.width / 2, 0);
+            dCtx.lineTo(demoCanvas.width / 2, demoCanvas.height);
+            dCtx.stroke();
+
+            // Animación de pulso en el objetivo
+            demoFrame += 0.08;
+            let radioPulso = 6 + Math.sin(demoFrame) * 3;
+            
+            let cx = demoCanvas.width / 2 + 30;
+            let cy = demoCanvas.height / 2 - 20;
+
+            dCtx.fillStyle = "#50C878";
+            dCtx.beginPath();
+            dCtx.arc(cx, cy, radioPulso, 0, Math.PI * 2);
+            dCtx.fill();
+
+            dCtx.strokeStyle = "#FFFFFF";
+            dCtx.lineWidth = 1.5;
+            dCtx.stroke();
+        }
+        requestAnimationFrame(animarDemo);
+    }
+    animarDemo();
+}
+
 function mostrarMensaje(texto, color) {
     mensaje.innerText = texto;
     mensaje.style.color = color;
