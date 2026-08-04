@@ -30,15 +30,14 @@
                 4. Tienes 2 minutos para acumular puntos y entrar al Top 10.
             </p>
             
-            <!-- Demostración visual con formato explícito -->
+            <!-- Demostración visual -->
             <div class="demo-contenedor">
                 <div class="demo-texto">
                     <b>Formatos válidos:</b><br>
-                    Usa punto y coma " ; ", coma " , " o espacio.<br>
+                    Usa " ; ", " , " o espacio.<br>
                     Ejemplos:<br>
                     <span style="color: #50C878;">3 ; -2</span> | <span style="color: #50C878;">3 , -2</span> | <span style="color: #50C878;">3 -2</span>
                 </div>
-                <!-- Canvas con alta resolución para nitidez -->
                 <canvas id="demoCanvas" width="260" height="200" style="width: 130px; height: 100px;"></canvas>
             </div>
 
@@ -69,6 +68,7 @@
             </div>
         </div>
 
+        <!-- Tabla de Ranking Simétrica con Scroll -->
         <div id="contenedor-ranking">
             <h3>🏆 RANKING EN VIVO</h3>
             <ul id="listaRanking">
@@ -77,6 +77,6 @@
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="juego.js?v=22"></script>
+    <script src="juego.js?v=23"></script>
 </body>
 </html>
