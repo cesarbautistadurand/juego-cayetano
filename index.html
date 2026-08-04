@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Misión Cartesiana - Cayetano</title>
-    <!-- Importar tipografía Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="estilos.css">
 </head>
@@ -14,9 +13,43 @@
     <div id="pantalla-login">
         <h1>Misión Cartesiana</h1>
         <h2>Bachillerato Cayetano</h2>
-        <p>Ingresa tu nombre completo para iniciar la partida:</p>
-        <input type="text" id="inputNombre" placeholder="Tu nombre completo">
+        <p>Ingresa tu nombre para iniciar la partida:</p>
+        <input type="text" id="inputNombre" placeholder="Tu nombre">
         <button id="btnEntrar">ENTRAR AL JUEGO</button>
+        
+        <!-- Botón de Instrucciones -->
+        <button id="btnInstrucciones">📖 ¿CÓMO JUGAR?</button>
+    </div>
+
+    <!-- MODAL DE INSTRUCCIONES -->
+    <div id="modalInstrucciones" class="modal">
+        <div class="contenido-modal">
+            <h3>INSTRUCCIONES</h3>
+            <p>
+                1. Escribe tu nombre y entra a la sala.<br>
+                2. Localiza a la mascota del Cayetano en el plano cartesiano.<br>
+                3. Escribe las coordenadas separadas con punto y coma (ej. <b>3;-2</b>) y presiona <b>DISPARAR</b>.<br>
+                4. Tienes 2 minutos para acumular puntos y entrar al Top 10.
+            </p>
+            
+            <!-- Demostración al costado -->
+            <div class="demo-contenedor">
+                <div class="demo-texto">
+                    <b>Ejemplo de coordenadas:</b><br>
+                    • Eje Horizontal: <b>X</b><br>
+                    • Eje Vertical: <b>Y</b><br>
+                    • Formato correcto: <span style="color: #50C878;">X;Y</span>
+                </div>
+                <div class="demo-caja">
+                    <span>Ejemplo:</span><br>
+                    (3, -2)<br>
+                    ⬇️<br>
+                    <b>3;-2</b>
+                </div>
+            </div>
+
+            <button id="cerrarModal">ENTENDIDO</button>
+        </div>
     </div>
 
     <!-- PANTALLA 2: El Juego -->
@@ -27,25 +60,21 @@
                 <div id="panel-reloj">⏱️ 02:00</div>
             </div>
             
-            <!-- Contenedor del plano -->
             <div id="contenedor-plano">
                 <canvas id="plano" width="600" height="400"></canvas>
                 <p id="mensaje" style="opacity: 0;">Cargando juego...</p>
                 
-                <!-- Panel central de alertas y cuenta regresiva -->
                 <div id="alerta-central" style="display: none;">
                     <h2 id="texto-alerta">¡LISTOS!</h2>
                 </div>
             </div>
             
-            <!-- Controles -->
             <div id="controles">
                 <input type="text" id="inputCoordenadas" placeholder="Ej: 3;-2">
                 <button id="btnDisparar">DISPARAR</button>
             </div>
         </div>
 
-        <!-- Tabla de Ranking a un costado -->
         <div id="contenedor-ranking">
             <h3>🏆 RANKING EN VIVO</h3>
             <ul id="listaRanking">
@@ -54,6 +83,6 @@
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="juego.js?v=7"></script>
+    <script src="juego.js?v=9"></script>
 </body>
 </html>
