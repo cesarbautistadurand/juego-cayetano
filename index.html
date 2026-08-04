@@ -21,31 +21,26 @@
         <button id="btnInstrucciones">📖 ¿CÓMO JUGAR?</button>
     </div>
 
-    <!-- MODAL DE INSTRUCCIONES -->
+    <!-- MODAL DE INSTRUCCIONES CON ANIMACIÓN EN MOVIMIENTO -->
     <div id="modalInstrucciones" class="modal">
         <div class="contenido-modal">
             <h3>INSTRUCCIONES</h3>
             <p>
                 1. Escribe tu nombre y entra a la sala.<br>
-                2. Localiza a la mascota del Cayetano en el plano cartesiano.<br>
-                3. Escribe las coordenadas separadas con punto y coma (ej. <b>3;-2</b>) y presiona <b>DISPARAR</b>.<br>
+                2. Localiza el objetivo en el plano cartesiano.<br>
+                3. Escribe las coordenadas y presiona <b>DISPARAR</b>.<br>
                 4. Tienes 2 minutos para acumular puntos y entrar al Top 10.
             </p>
             
-            <!-- Demostración al costado -->
+            <!-- Demostración en movimiento -->
             <div class="demo-contenedor">
                 <div class="demo-texto">
-                    <b>Ejemplo de coordenadas:</b><br>
-                    • Eje Horizontal: <b>X</b><br>
-                    • Eje Vertical: <b>Y</b><br>
-                    • Formato correcto: <span style="color: #50C878;">X;Y</span>
+                    <b>Ejemplo práctico:</b><br>
+                    Usa el punto y coma (<b>;</b>)<br>
+                    Ejemplo: <span style="color: #50C878;">3;-2</span>
                 </div>
-                <div class="demo-caja">
-                    <span>Ejemplo:</span><br>
-                    (3, -2)<br>
-                    ⬇️<br>
-                    <b>3;-2</b>
-                </div>
+                <!-- Canvas animado -->
+                <canvas id="demoCanvas" width="130" height="100"></canvas>
             </div>
 
             <button id="cerrarModal">ENTENDIDO</button>
@@ -83,6 +78,6 @@
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="juego.js?v=9"></script>
+    <script src="juego.js?v=10"></script>
 </body>
 </html>
