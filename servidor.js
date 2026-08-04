@@ -11,7 +11,7 @@ let alienY = 0;
 
 let estadoJuego = 'esperando'; 
 let segundosRestantes = 120;   
-let segundosCountdown = 10;    
+let segundosCountdown = 120; // 2 minutos de espera al inicio
 let intervaloJuego = null;
 let intervaloCountdown = null;
 
@@ -28,7 +28,7 @@ function enviarRanking() {
 
 function iniciarCountdown() {
     estadoJuego = 'countdown';
-    segundosCountdown = 10;
+    segundosCountdown = 120;
 
     for (let id in jugadores) {
         jugadores[id].puntaje = 0;
@@ -72,10 +72,8 @@ function finalizarJuego() {
     estadoJuego = 'terminado';
     let listaOrdenada = Object.values(jugadores).sort((a, b) => b.puntaje - a.puntaje);
     
-    // Enviamos el top 3 para el podio
-    io.emit('finPartida', { ranking: listaOrdenada.slice(0, 3) });
+    io.emit('finPartida', { ranking: listaOrdenada.slice(0, 10) });
 
-    // El podio se muestra durante 1 minuto (60,000 milisegundos) antes de la revancha
     setTimeout(() => {
         if (Object.keys(jugadores).length > 0) {
             iniciarCountdown();
