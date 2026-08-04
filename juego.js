@@ -42,7 +42,7 @@ cerrarModal.addEventListener("click", () => {
 // MIRA TÁCTICA REDUCIDA Y PROPORCIONAL
 function dibujarMira(targetCtx, x, y) {
     targetCtx.save();
-    targetCtx.strokeStyle = "#00FF66"; // Verde neón táctico
+    targetCtx.strokeStyle = "#00FF66"; 
     targetCtx.lineWidth = 1;
     
     let r = 3.5;
@@ -65,7 +65,7 @@ function dibujarMira(targetCtx, x, y) {
     targetCtx.restore();
 }
 
-// ANIMACIÓN DE DEMOSTRACIÓN NÍTIDA Y EN EL MISMO CUADRANTE (IV)
+// ANIMACIÓN DE DEMOSTRACIÓN NÍTIDA
 const demoCanvas = document.getElementById("demoCanvas");
 if (demoCanvas) {
     const dCtx = demoCanvas.getContext("2d");
