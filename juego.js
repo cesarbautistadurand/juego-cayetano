@@ -32,7 +32,8 @@ function mostrarMensaje(texto, color) {
     mensaje.style.color = color;
     mensaje.style.opacity = "1"; 
     clearTimeout(mensajeTimer);
-    mensajeTimer = setTimeout(() => { mensaje.style.opacity = "0"; }, 3000);
+    // TIEMPO REDUCIDO: El mensaje desaparece más rápido (1.1 segundos)
+    mensajeTimer = setTimeout(() => { mensaje.style.opacity = "0"; }, 1100);
 }
 
 btnEntrar.addEventListener("click", () => {
@@ -65,7 +66,7 @@ function dibujarPlano() {
     ctx.beginPath(); ctx.moveTo(centroX, 0); ctx.lineTo(centroX, canvas.height); ctx.stroke(); 
 
     ctx.fillStyle = "#FFFFFF"; 
-    ctx.font = "12px Arial";
+    ctx.font = "12px Poppins, Arial";
     for(let x = -10; x <= 10; x++) {
         if(x !== 0) { 
             let px = centroX + (x * escala);
@@ -81,7 +82,7 @@ function dibujarPlano() {
     
     ctx.fillText("0", centroX + 5, centroY + 15);
     ctx.fillStyle = "#F7B232"; 
-    ctx.font = "bold 16px Arial";
+    ctx.font = "bold 16px Poppins, Arial";
     ctx.fillText("X", canvas.width - 20, centroY - 10);
     ctx.fillText("Y", centroX - 25, 20);
 }
@@ -103,20 +104,19 @@ function dibujarAlien(x, y) {
 
 socket.on('inicioCountdown', (segundos) => {
     dibujarPlano();
-    textoAlerta.innerHTML = `⚠️ PREPÁRENSE<br><span style="font-size: 50px; color: #F7B232;">${segundos}</span>`;
+    textoAlerta.innerHTML = `⚠️ PREPÁRENSE<br><span style="font-size: 45px; color: #F7B232;">${segundos}</span>`;
     alertaCentral.style.display = "flex";
 });
 
 socket.on('actualizarCountdown', (segundos) => {
     if (segundos > 0) {
-        textoAlerta.innerHTML = `⚠️ COMIENZA EN<br><span style="font-size: 50px; color: #F7B232;">${segundos}</span>`;
+        textoAlerta.innerHTML = `⚠️ COMIENZA EN<br><span style="font-size: 45px; color: #F7B232;">${segundos}</span>`;
         alertaCentral.style.display = "flex";
     } else {
-        // Texto cambiado de "¡A BATALLAR!" a "¡INICIAR PARTIDA!"
-        textoAlerta.innerHTML = `<span style="font-size: 38px; color: #50C878;">¡INICIAR PARTIDA!</span>`;
+        textoAlerta.innerHTML = `<span style="font-size: 35px; color: #50C878;">¡INICIAR PARTIDA!</span>`;
         setTimeout(() => {
             alertaCentral.style.display = "none";
-        }, 1000);
+        }, 800);
     }
 });
 
@@ -141,7 +141,7 @@ socket.on('impactoCorrecto', (datos) => {
         textoAlerta.innerHTML = "¡ACERTASTE!<br>+100 Puntos";
         textoAlerta.style.color = "#50C878";
     } else {
-        textoAlerta.innerHTML = `¡SE TE ADELANTARON!<br><span style="color:#FFFFFF; font-size:20px;">${datos.nombreGanador.toUpperCase()} atrapó la mascota</span>`;
+        textoAlerta.innerHTML = `¡SE TE ADELANTARON!<br><span style="color:#FFFFFF; font-size:18px;">${datos.nombreGanador.toUpperCase()} atrapó la mascota</span>`;
         textoAlerta.style.color = "#F7B232"; 
     }
     
@@ -151,17 +151,17 @@ socket.on('impactoCorrecto', (datos) => {
     alienX = datos.nuevoX;
     alienY = datos.nuevoY;
     
+    // TIEMPO REDUCIDO: La alerta de acierto se quita mucho más rápido (1 segundo)
     setTimeout(() => {
         alertaCentral.style.display = "none";
         dibujarPlano();
         dibujarAlien(alienX, alienY);
         mostrarMensaje("¡Nuevo objetivo detectado!", "#FFFFFF");
-    }, 1500);
+    }, 1000);
 });
 
-// NUEVO PODIO DE GANADORES QUE DURA 1 MINUTO
 socket.on('finPartida', (datos) => {
-    let podiumHtml = `🏆 ¡FIN DE LA PARTIDA! 🏆<br><br><span style="font-size:22px; color:#F7B232;">PODIO DE GANADORES</span><br><div style="font-size:20px; text-align:left; display:inline-block; margin-top:15px; line-height:1.6;">`;
+    let podiumHtml = `🏆 ¡FIN DE LA PARTIDA! 🏆<br><br><span style="font-size:20px; color:#F7B232;">PODIO DE GANADORES</span><br><div style="font-size:18px; text-align:left; display:inline-block; margin-top:10px; line-height:1.5;">`;
     
     if (datos.ranking && datos.ranking.length > 0) {
         datos.ranking.forEach((j, index) => {
@@ -172,7 +172,7 @@ socket.on('finPartida', (datos) => {
     } else {
         podiumHtml += `No hubo participantes.<br>`;
     }
-    podiumHtml += `</div><br><span style="font-size:14px; color:#F7B232;">Nueva partida en breve...</span>`;
+    podiumHtml += `</div><br><span style="font-size:13px; color:#F7B232;">Nueva partida en breve...</span>`;
 
     textoAlerta.innerHTML = podiumHtml;
     textoAlerta.style.color = "#FFFFFF";
@@ -181,10 +181,10 @@ socket.on('finPartida', (datos) => {
 
 socket.on('fallo', (intento) => {
     mostrarMensaje(`Disparaste a X:${intento.x}; Y:${intento.y}. ¡Fallaste!`, "#F7B232");
-    canvas.style.transform = "translateX(10px)";
-    setTimeout(() => canvas.style.transform = "translateX(-10px)", 50);
-    setTimeout(() => canvas.style.transform = "translateX(10px)", 100);
-    setTimeout(() => canvas.style.transform = "translateX(0)", 150);
+    canvas.style.transform = "translateX(8px)";
+    setTimeout(() => canvas.style.transform = "translateX(-8px)", 40);
+    setTimeout(() => canvas.style.transform = "translateX(8px)", 80);
+    setTimeout(() => canvas.style.transform = "translateX(0)", 120);
 });
 
 socket.on('actualizarRanking', (listaJugadores) => {
