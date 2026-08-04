@@ -19,7 +19,7 @@
         <button id="btnInstrucciones">📖 ¿CÓMO JUGAR?</button>
     </div>
 
-    <!-- MODAL DE INSTRUCCIONES ACTUALIZADO -->
+    <!-- MODAL DE INSTRUCCIONES -->
     <div id="modalInstrucciones" class="modal">
         <div class="contenido-modal">
             <h3>INSTRUCCIONES</h3>
@@ -30,7 +30,7 @@
                 4. Tienes 2 minutos para acumular puntos y entrar al Top 10.
             </p>
             
-            <!-- Demostración visual indicando flexibilidad de formatos -->
+            <!-- Demostración visual nítida y en el mismo cuadrante -->
             <div class="demo-contenedor">
                 <div class="demo-texto">
                     <b>Formatos de coordenadas:</b><br>
@@ -38,7 +38,8 @@
                     Ejemplos:<br>
                     <span style="color: #50C878;">3;-2</span> | <span style="color: #50C878;">3, -2</span> | <span style="color: #50C878;">3 -2</span>
                 </div>
-                <canvas id="demoCanvas" width="130" height="100"></canvas>
+                <!-- Canvas con alta resolución para evitar borrosidad -->
+                <canvas id="demoCanvas" width="260" height="200" style="width: 130px; height: 100px;"></canvas>
             </div>
 
             <button id="cerrarModal">ENTENDIDO</button>
@@ -76,6 +77,6 @@
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="juego.js?v=20"></script>
+    <script src="juego.js?v=21"></script>
 </body>
 </html>
