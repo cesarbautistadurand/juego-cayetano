@@ -22,7 +22,6 @@ let alienY = 0;
 let miNombre = "";
 let mensajeTimer; 
 
-// CARGA SEGURA DE LA IMAGEN DE LA MASCOTA
 const imgMascota = new Image();
 let mascotaCargada = false;
 imgMascota.onload = () => { mascotaCargada = true; };
@@ -95,7 +94,6 @@ function dibujarAlien(x, y) {
     if (mascotaCargada) {
         ctx.drawImage(imgMascota, px - tamaño / 2, py - tamaño / 2, tamaño, tamaño);
     } else {
-        // Dibuja un círculo de respaldo mientras carga la imagen
         ctx.fillStyle = "#F7B232";
         ctx.beginPath();
         ctx.arc(px, py, 15, 0, Math.PI * 2);
@@ -114,7 +112,8 @@ socket.on('actualizarCountdown', (segundos) => {
         textoAlerta.innerHTML = `⚠️ COMIENZA EN<br><span style="font-size: 50px; color: #F7B232;">${segundos}</span>`;
         alertaCentral.style.display = "flex";
     } else {
-        textoAlerta.innerHTML = `<span style="font-size: 45px; color: #50C878;">¡A BATALLAR!</span>`;
+        // Texto cambiado de "¡A BATALLAR!" a "¡INICIAR PARTIDA!"
+        textoAlerta.innerHTML = `<span style="font-size: 38px; color: #50C878;">¡INICIAR PARTIDA!</span>`;
         setTimeout(() => {
             alertaCentral.style.display = "none";
         }, 1000);
@@ -142,7 +141,7 @@ socket.on('impactoCorrecto', (datos) => {
         textoAlerta.innerHTML = "¡ACERTASTE!<br>+100 Puntos";
         textoAlerta.style.color = "#50C878";
     } else {
-        textoAlerta.innerHTML = `¡SE TE ADELANTARON!<br><span style="color:#FFFFFF; font-size:22px;">${datos.nombreGanador.toUpperCase()} atrapó la mascota</span>`;
+        textoAlerta.innerHTML = `¡SE TE ADELANTARON!<br><span style="color:#FFFFFF; font-size:20px;">${datos.nombreGanador.toUpperCase()} atrapó la mascota</span>`;
         textoAlerta.style.color = "#F7B232"; 
     }
     
@@ -160,14 +159,28 @@ socket.on('impactoCorrecto', (datos) => {
     }, 1500);
 });
 
+// NUEVO PODIO DE GANADORES QUE DURA 1 MINUTO
 socket.on('finPartida', (datos) => {
-    textoAlerta.innerHTML = `🏁 ¡FIN DE LA RONDA! 🏁<br><br>🏆 Ganador: <span style="color:#50C878;">${datos.ganador.toUpperCase()}</span><br><span style="font-size:22px; color:#F7B232;">Puntaje: ${datos.puntaje} pts</span>`;
+    let podiumHtml = `🏆 ¡FIN DE LA PARTIDA! 🏆<br><br><span style="font-size:22px; color:#F7B232;">PODIO DE GANADORES</span><br><div style="font-size:20px; text-align:left; display:inline-block; margin-top:15px; line-height:1.6;">`;
+    
+    if (datos.ranking && datos.ranking.length > 0) {
+        datos.ranking.forEach((j, index) => {
+            let medalla = index === 0 ? "🥇 1er Lugar:" : index === 1 ? "🥈 2do Lugar:" : "🥉 3er Lugar:";
+            let colorPuesto = index === 0 ? "#50C878" : "#FFFFFF";
+            podiumHtml += `<span style="color:${colorPuesto};">${medalla} <b>${j.nombre}</b> (${j.puntaje} pts)</span><br>`;
+        });
+    } else {
+        podiumHtml += `No hubo participantes.<br>`;
+    }
+    podiumHtml += `</div><br><span style="font-size:14px; color:#F7B232;">Nueva partida en breve...</span>`;
+
+    textoAlerta.innerHTML = podiumHtml;
     textoAlerta.style.color = "#FFFFFF";
     alertaCentral.style.display = "flex";
 });
 
 socket.on('fallo', (intento) => {
-    mostrarMensaje(`Disparaste a X:${intento.x}, Y:${intento.y}. ¡Fallaste!`, "#F7B232");
+    mostrarMensaje(`Disparaste a X:${intento.x}; Y:${intento.y}. ¡Fallaste!`, "#F7B232");
     canvas.style.transform = "translateX(10px)";
     setTimeout(() => canvas.style.transform = "translateX(-10px)", 50);
     setTimeout(() => canvas.style.transform = "translateX(10px)", 100);
@@ -191,7 +204,7 @@ btnDisparar.addEventListener("click", () => {
     let valores = inputCoords.value.match(/-?\d+/g);
     
     if(!valores || valores.length !== 2) {
-        mostrarMensaje("Usa el formato X,Y (Ej: 3,-2)", "#F7B232");
+        mostrarMensaje("Usa el formato X;Y (Ej: 3;-2)", "#F7B232");
         return;
     }
     
