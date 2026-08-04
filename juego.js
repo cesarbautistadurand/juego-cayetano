@@ -65,7 +65,7 @@ function dibujarMira(targetCtx, x, y) {
     targetCtx.restore();
 }
 
-// ANIMACIÓN DE DEMOSTRACIÓN: UBICADA CORRECTAMENTE EN EL CUARTO CUADRANTE PARA (3 ; -2)
+// ANIMACIÓN DE DEMOSTRACIÓN: UBICADA EN EL CUARTO CUADRANTE PARA (3 ; -2)
 const demoCanvas = document.getElementById("demoCanvas");
 if (demoCanvas) {
     const dCtx = demoCanvas.getContext("2d");
@@ -85,17 +85,15 @@ if (demoCanvas) {
             dCtx.lineTo(dcx, demoCanvas.height);
             dCtx.stroke();
 
-            // Texto de coordenadas simulado ubicado inteligentemente para no estorbar
             dCtx.fillStyle = "#FFFFFF";
             dCtx.font = "9px Poppins, Arial";
             dCtx.fillText("(3 ; -2)", dcx - 38, dcy - 12);
 
-            // Coordenadas exactas en la demo: X = 3, Y = -2 (Cuadrante IV: Derecha y Abajo)
             let demoX = 3;
             let demoY = -2;
             let escalaDemo = 10;
             let px = dcx + (demoX * escalaDemo);
-            let py = dcy - (demoY * escalaDemo); // Al ser Y negativo, esto baja en el canvas
+            let py = dcy - (demoY * escalaDemo);
 
             let tamañoDemo = 36;
 
@@ -174,7 +172,6 @@ function dibujarPlano() {
     ctx.fillText("Y", centroX - 25, 20);
 }
 
-// DIBUJAR MASCOTA Y LA MIRA EN EL JUEGO PRINCIPAL
 function dibujarAlien(x, y) {
     const px = centroX + (x * escala);
     const py = centroY - (y * escala);
