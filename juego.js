@@ -39,11 +39,39 @@ cerrarModal.addEventListener("click", () => {
     modalInstrucciones.style.display = "none";
 });
 
-// ANIMACIÓN DE DEMOSTRACIÓN: PUNTO DE MIRA DE ALTO CONTRASTE EN EL CUELLO
+// NUEVO DISEÑO DE MIRA TÁCTICA PROFESIONAL
+function dibujarMira(targetCtx, x, y) {
+    targetCtx.save();
+    targetCtx.strokeStyle = "#00FF66"; // Verde neón táctico
+    targetCtx.lineWidth = 1.5;
+    
+    let r = 7;
+    // Círculo exterior de la mira
+    targetCtx.beginPath();
+    targetCtx.arc(x, y, r, 0, Math.PI * 2);
+    targetCtx.stroke();
+    
+    // Líneas de la cruz (arriba, abajo, izquierda, derecha)
+    let len = 4;
+    targetCtx.beginPath();
+    targetCtx.moveTo(x, y - r - len); targetCtx.lineTo(x, y - r);
+    targetCtx.moveTo(x, y + r); targetCtx.lineTo(x, y + r + len);
+    targetCtx.moveTo(x - r - len, y); targetCtx.lineTo(x - r, y);
+    targetCtx.moveTo(x + r, y); targetCtx.lineTo(x + r + len, y);
+    targetCtx.stroke();
+    
+    // Punto central blanco brillante
+    targetCtx.fillStyle = "#FFFFFF";
+    targetCtx.beginPath();
+    targetCtx.arc(x, y, 1.5, 0, Math.PI * 2);
+    targetCtx.fill();
+    targetCtx.restore();
+}
+
+// ANIMACIÓN DE DEMOSTRACIÓN CON LA NUEVA MIRA EN EL CUELLO
 const demoCanvas = document.getElementById("demoCanvas");
 if (demoCanvas) {
     const dCtx = demoCanvas.getContext("2d");
-    let demoFrame = 0;
     function animarDemo() {
         if (modalInstrucciones.style.display === "flex") {
             dCtx.clearRect(0, 0, demoCanvas.width, demoCanvas.height);
@@ -80,20 +108,8 @@ if (demoCanvas) {
                 dCtx.fill();
             }
 
-            // PUNTO DE MIRA DE ALTO CONTRASTE (CIAN Y AMARILLO NEÓN) EN LA DEMO
-            demoFrame += 0.1;
-            let radioMira = 3.5 + Math.sin(demoFrame) * 0.8;
-
-            dCtx.strokeStyle = "#00E5FF"; // Cian brillante
-            dCtx.lineWidth = 1.2;
-            dCtx.beginPath();
-            dCtx.arc(px, py, radioMira, 0, Math.PI * 2);
-            dCtx.stroke();
-
-            dCtx.fillStyle = "#FFFF00"; // Amarillo neón
-            dCtx.beginPath();
-            dCtx.arc(px, py, 1.5, 0, Math.PI * 2);
-            dCtx.fill();
+            // Aplicar la nueva mira táctica en el cuello
+            dibujarMira(dCtx, px, py);
         }
         requestAnimationFrame(animarDemo);
     }
@@ -159,7 +175,7 @@ function dibujarPlano() {
     ctx.fillText("Y", centroX - 25, 20);
 }
 
-// FUNCIÓN PARA DIBUJAR LA MASCOTA Y EL PUNTO DE MIRA DE ALTO CONTRASTE (JUEGO PRINCIPAL)
+// DIBUJAR MASCOTA Y LA NUEVA MIRA TÁCTICA EN EL JUEGO PRINCIPAL
 function dibujarAlien(x, y) {
     const px = centroX + (x * escala);
     const py = centroY - (y * escala);
@@ -174,17 +190,8 @@ function dibujarAlien(x, y) {
         ctx.fill();
     }
 
-    // PUNTO DE MIRA DE ALTO CONTRASTE (CIAN Y AMARILLO NEÓN) EN EL JUEGO
-    ctx.strokeStyle = "#00E5FF"; // Cian brillante
-    ctx.lineWidth = 1.2;
-    ctx.beginPath();
-    ctx.arc(px, py, 4, 0, Math.PI * 2);
-    ctx.stroke();
-
-    ctx.fillStyle = "#FFFF00"; // Amarillo neón
-    ctx.beginPath();
-    ctx.arc(px, py, 1.5, 0, Math.PI * 2);
-    ctx.fill();
+    // Aplicar la mira táctica profesional en el cuello de la mascota
+    dibujarMira(ctx, px, py);
 }
 
 socket.on('inicioCountdown', (segundos) => {
