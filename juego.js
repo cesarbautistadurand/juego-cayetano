@@ -3,6 +3,10 @@ const socket = io();
 const pantallaLogin = document.getElementById("pantalla-login");
 const inputNombre = document.getElementById("inputNombre");
 const btnEntrar = document.getElementById("btnEntrar");
+const btnInstrucciones = document.getElementById("btnInstrucciones");
+const modalInstrucciones = document.getElementById("modalInstrucciones");
+const cerrarModal = document.getElementById("cerrarModal");
+
 const pantallaJuego = document.getElementById("pantalla-juego");
 const canvas = document.getElementById("plano");
 const ctx = canvas.getContext("2d");
@@ -27,12 +31,20 @@ let mascotaCargada = false;
 imgMascota.onload = () => { mascotaCargada = true; };
 imgMascota.src = 'mascota.png';
 
+// Lógica del Modal de Instrucciones
+btnInstrucciones.addEventListener("click", () => {
+    modalInstrucciones.style.display = "flex";
+});
+
+cerrarModal.addEventListener("click", () => {
+    modalInstrucciones.style.display = "none";
+});
+
 function mostrarMensaje(texto, color) {
     mensaje.innerText = texto;
     mensaje.style.color = color;
     mensaje.style.opacity = "1"; 
     clearTimeout(mensajeTimer);
-    // TIEMPO REDUCIDO: El mensaje desaparece más rápido (1.1 segundos)
     mensajeTimer = setTimeout(() => { mensaje.style.opacity = "0"; }, 1100);
 }
 
@@ -151,7 +163,6 @@ socket.on('impactoCorrecto', (datos) => {
     alienX = datos.nuevoX;
     alienY = datos.nuevoY;
     
-    // TIEMPO REDUCIDO: La alerta de acierto se quita mucho más rápido (1 segundo)
     setTimeout(() => {
         alertaCentral.style.display = "none";
         dibujarPlano();
@@ -161,18 +172,18 @@ socket.on('impactoCorrecto', (datos) => {
 });
 
 socket.on('finPartida', (datos) => {
-    let podiumHtml = `🏆 ¡FIN DE LA PARTIDA! 🏆<br><br><span style="font-size:20px; color:#F7B232;">PODIO DE GANADORES</span><br><div style="font-size:18px; text-align:left; display:inline-block; margin-top:10px; line-height:1.5;">`;
+    let podiumHtml = `🏆 ¡FIN DE LA PARTIDA! 🏆<br><br><span style="font-size:18px; color:#F7B232;">GANADORES</span><br><div style="font-size:13px; text-align:left; display:inline-block; margin-top:5px; line-height:1.4; max-height:220px; overflow-y:auto; padding:0 10px;">`;
     
     if (datos.ranking && datos.ranking.length > 0) {
         datos.ranking.forEach((j, index) => {
-            let medalla = index === 0 ? "🥇 1er Lugar:" : index === 1 ? "🥈 2do Lugar:" : "🥉 3er Lugar:";
+            let medalla = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : `${index + 1}.`;
             let colorPuesto = index === 0 ? "#50C878" : "#FFFFFF";
             podiumHtml += `<span style="color:${colorPuesto};">${medalla} <b>${j.nombre}</b> (${j.puntaje} pts)</span><br>`;
         });
     } else {
         podiumHtml += `No hubo participantes.<br>`;
     }
-    podiumHtml += `</div><br><span style="font-size:13px; color:#F7B232;">Nueva partida en breve...</span>`;
+    podiumHtml += `</div><br><span style="font-size:12px; color:#F7B232;">Nueva partida en breve...</span>`;
 
     textoAlerta.innerHTML = podiumHtml;
     textoAlerta.style.color = "#FFFFFF";
