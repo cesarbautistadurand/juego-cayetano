@@ -65,48 +65,52 @@ function dibujarMira(targetCtx, x, y) {
     targetCtx.restore();
 }
 
-// ANIMACIÓN DE DEMOSTRACIÓN: UBICADA EN EL CUARTO CUADRANTE PARA (3 ; -2)
+// ANIMACIÓN DE DEMOSTRACIÓN: NÍTIDA Y EN EL MISMO CUADRANTE (IV)
 const demoCanvas = document.getElementById("demoCanvas");
 if (demoCanvas) {
     const dCtx = demoCanvas.getContext("2d");
+    dCtx.scale(2, 2); // Escala para máxima nitidez (HD)
+    
     function animarDemo() {
         if (modalInstrucciones.style.display === "flex") {
-            dCtx.clearRect(0, 0, demoCanvas.width, demoCanvas.height);
+            dCtx.clearRect(0, 0, 130, 100);
             
-            const dcx = demoCanvas.width / 2;
-            const dcy = demoCanvas.height / 2;
+            const dcx = 130 / 2; // 65
+            const dcy = 100 / 2; // 50
 
             dCtx.strokeStyle = "#F7B232";
             dCtx.lineWidth = 1;
             dCtx.beginPath();
             dCtx.moveTo(0, dcy);
-            dCtx.lineTo(demoCanvas.width, dcy);
+            dCtx.lineTo(130, dcy);
             dCtx.moveTo(dcx, 0);
-            dCtx.lineTo(dcx, demoCanvas.height);
+            dCtx.lineTo(dcx, 100);
             dCtx.stroke();
 
-            dCtx.fillStyle = "#FFFFFF";
-            dCtx.font = "9px Poppins, Arial";
-            dCtx.fillText("(3 ; -2)", dcx - 38, dcy - 12);
-
-            let demoX = 3;
-            let demoY = -2;
-            let escalaDemo = 10;
+            // Posición exacta en el cuarto cuadrante (X positivo, Y negativo)
+            let demoX = 2.5;
+            let demoY = -1.8;
+            let escalaDemo = 14;
             let px = dcx + (demoX * escalaDemo);
             let py = dcy - (demoY * escalaDemo);
 
-            let tamañoDemo = 36;
+            let tamañoDemo = 32;
 
             if (mascotaCargada) {
-                dCtx.drawImage(imgMascota, px - tamañoDemo / 2, py - 16, tamañoDemo, tamañoDemo);
+                dCtx.drawImage(imgMascota, px - tamañoDemo / 2, py - 14, tamañoDemo, tamañoDemo);
             } else {
                 dCtx.fillStyle = "#50C878";
                 dCtx.beginPath();
-                dCtx.arc(px, py, 10, 0, Math.PI * 2);
+                dCtx.arc(px, py, 8, 0, Math.PI * 2);
                 dCtx.fill();
             }
 
             dibujarMira(dCtx, px, py);
+
+            // TEXTO (3 ; -2) COLOCADO EN EL MISMO CUADRANTE (IV), JUSTO AL LADO
+            dCtx.fillStyle = "#FFFFFF";
+            dCtx.font = "8px Poppins, Arial";
+            dCtx.fillText("(3 ; -2)", px - 12, py + 24);
         }
         requestAnimationFrame(animarDemo);
     }
