@@ -31,7 +31,6 @@ let mascotaCargada = false;
 imgMascota.onload = () => { mascotaCargada = true; };
 imgMascota.src = 'mascota.png';
 
-// Lógica del Modal de Instrucciones
 btnInstrucciones.addEventListener("click", () => {
     modalInstrucciones.style.display = "flex";
 });
@@ -40,7 +39,7 @@ cerrarModal.addEventListener("click", () => {
     modalInstrucciones.style.display = "none";
 });
 
-// ANIMACIÓN EN MOVIMIENTO PARA EL CANVAS DE DEMOSTRACIÓN
+// ANIMACIÓN DE DEMOSTRACIÓN CON EJES Y COORDENADAS
 const demoCanvas = document.getElementById("demoCanvas");
 if (demoCanvas) {
     const dCtx = demoCanvas.getContext("2d");
@@ -49,30 +48,37 @@ if (demoCanvas) {
         if (modalInstrucciones.style.display === "flex") {
             dCtx.clearRect(0, 0, demoCanvas.width, demoCanvas.height);
             
-            // Mini ejes cartesianos
+            const dcx = demoCanvas.width / 2;
+            const dcy = demoCanvas.height / 2;
+
+            // Dibujar ejes cartesianos en miniatura
             dCtx.strokeStyle = "#F7B232";
             dCtx.lineWidth = 1;
             dCtx.beginPath();
-            dCtx.moveTo(0, demoCanvas.height / 2);
-            dCtx.lineTo(demoCanvas.width, demoCanvas.height / 2);
-            dCtx.moveTo(demoCanvas.width / 2, 0);
-            dCtx.lineTo(demoCanvas.width / 2, demoCanvas.height);
+            dCtx.moveTo(0, dcy);
+            dCtx.lineTo(demoCanvas.width, dcy);
+            dCtx.moveTo(dcx, 0);
+            dCtx.lineTo(dcx, demoCanvas.height);
             dCtx.stroke();
 
-            // Animación de pulso en el objetivo
+            // Texto de coordenadas simulado
+            dCtx.fillStyle = "#FFFFFF";
+            dCtx.font = "9px Poppins, Arial";
+            dCtx.fillText("(3 ; -2)", dcx + 12, dcy + 22);
+
+            // Animación de pulso del objetivo
             demoFrame += 0.08;
-            let radioPulso = 6 + Math.sin(demoFrame) * 3;
+            let radioPulso = 5 + Math.sin(demoFrame) * 2;
             
-            let cx = demoCanvas.width / 2 + 30;
-            let cy = demoCanvas.height / 2 - 20;
+            let px = dcx + 30;
+            let py = dcy - 20;
 
             dCtx.fillStyle = "#50C878";
             dCtx.beginPath();
-            dCtx.arc(cx, cy, radioPulso, 0, Math.PI * 2);
+            dCtx.arc(px, py, radioPulso, 0, Math.PI * 2);
             dCtx.fill();
-
             dCtx.strokeStyle = "#FFFFFF";
-            dCtx.lineWidth = 1.5;
+            dCtx.lineWidth = 1;
             dCtx.stroke();
         }
         requestAnimationFrame(animarDemo);
