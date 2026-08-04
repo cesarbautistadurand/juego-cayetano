@@ -39,7 +39,7 @@ cerrarModal.addEventListener("click", () => {
     modalInstrucciones.style.display = "none";
 });
 
-// ANIMACIÓN DE DEMOSTRACIÓN: MASCOTA + PUNTO DE MIRA EN EL CUELLO
+// ANIMACIÓN DE DEMOSTRACIÓN: PUNTO DE MIRA FINO EN EL CUELLO
 const demoCanvas = document.getElementById("demoCanvas");
 if (demoCanvas) {
     const dCtx = demoCanvas.getContext("2d");
@@ -72,30 +72,28 @@ if (demoCanvas) {
             let tamañoDemo = 36;
 
             if (mascotaCargada) {
-                dCtx.drawImage(imgMascota, px - tamañoDemo / 2, py - tamañoDemo / 2, tamañoDemo, tamañoDemo);
+                // Desplazamiento vertical para que el cuello coincida con (px, py)
+                dCtx.drawImage(imgMascota, px - tamañoDemo / 2, py - 12, tamañoDemo, tamañoDemo);
             } else {
                 dCtx.fillStyle = "#50C878";
                 dCtx.beginPath();
-                dCtx.arc(px, py, 12, 0, Math.PI * 2);
+                dCtx.arc(px, py, 10, 0, Math.PI * 2);
                 dCtx.fill();
             }
 
-            // PUNTO DE MIRA EXACTO EN EL CUELLO (EN LA DEMO)
-            let cuelloX = px;
-            let cuelloY = py + 6; 
-
+            // PUNTO DE MIRA FINO Y EXACTO EN EL CUELLO (EN LA DEMO)
             demoFrame += 0.1;
-            let radioMira = 5 + Math.sin(demoFrame) * 1.5;
+            let radioMira = 3.5 + Math.sin(demoFrame) * 0.8;
 
             dCtx.strokeStyle = "#FF3366";
-            dCtx.lineWidth = 1.5;
+            dCtx.lineWidth = 1;
             dCtx.beginPath();
-            dCtx.arc(cuelloX, cuelloY, radioMira, 0, Math.PI * 2);
+            dCtx.arc(px, py, radioMira, 0, Math.PI * 2);
             dCtx.stroke();
 
             dCtx.fillStyle = "#FF0033";
             dCtx.beginPath();
-            dCtx.arc(cuelloX, cuelloY, 2.5, 0, Math.PI * 2);
+            dCtx.arc(px, py, 1.2, 0, Math.PI * 2);
             dCtx.fill();
         }
         requestAnimationFrame(animarDemo);
@@ -162,14 +160,15 @@ function dibujarPlano() {
     ctx.fillText("Y", centroX - 25, 20);
 }
 
-// FUNCIÓN PARA DIBUJAR LA MASCOTA Y EL PUNTO DE MIRA EN EL JUEGO PRINCIPAL
+// FUNCIÓN PARA DIBUJAR LA MASCOTA Y EL PUNTO DE MIRA FINO EN EL CUELLO (JUEGO PRINCIPAL)
 function dibujarAlien(x, y) {
     const px = centroX + (x * escala);
     const py = centroY - (y * escala);
     const tamaño = 45; 
     
     if (mascotaCargada) {
-        ctx.drawImage(imgMascota, px - tamaño / 2, py - tamaño / 2, tamaño, tamaño);
+        // Desplazamiento vertical para alinear exactamente el cuello con (px, py)
+        ctx.drawImage(imgMascota, px - tamaño / 2, py - 16, tamaño, tamaño);
     } else {
         ctx.fillStyle = "#F7B232";
         ctx.beginPath();
@@ -177,21 +176,16 @@ function dibujarAlien(x, y) {
         ctx.fill();
     }
 
-    // PUNTO DE MIRA EXACTO EN EL CUELLO DENTRO DEL JUEGO PRINCIPAL
-    let cuelloX = px;
-    let cuelloY = py + 7; 
-
-    // Círculo de mira exterior
+    // PUNTO DE MIRA FINO Y EXACTO EN EL CUELLO DENTRO DEL JUEGO
     ctx.strokeStyle = "#FF3366";
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.arc(cuelloX, cuelloY, 6, 0, Math.PI * 2);
+    ctx.arc(px, py, 4, 0, Math.PI * 2);
     ctx.stroke();
 
-    // Punto rojo central exacto
     ctx.fillStyle = "#FF0033";
     ctx.beginPath();
-    ctx.arc(cuelloX, cuelloY, 3, 0, Math.PI * 2);
+    ctx.arc(px, py, 1.5, 0, Math.PI * 2);
     ctx.fill();
 }
 
