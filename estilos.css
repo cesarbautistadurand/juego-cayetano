@@ -46,6 +46,16 @@ body {
     color: #5F1455;
 }
 
+/* ESTILO DEL MENSAJE DE AUTORÍA */
+#autor-credito {
+    margin-top: 18px;
+    font-size: 11.5px;
+    color: #F7B232;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+}
+
 .modal {
     display: none;
     position: fixed;
@@ -259,7 +269,6 @@ button {
 
 button:hover { background-color: #FFFFFF; }
 
-/* RANKING SIMÉTRICO CON SCROLL INTERNO PARA MÚLTIPLES ALUMNOS */
 #contenedor-ranking {
     background-color: #0F1428;
     padding: 15px;
