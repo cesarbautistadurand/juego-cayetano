@@ -25,18 +25,17 @@
     <!-- MODAL DE INSTRUCCIONES -->
     <div id="modalInstrucciones" class="modal">
         <div class="contenido-modal">
-            <h3>INSTRUCCIONES</h3>
-            <p>
-                1. Escribe tu nombre y entra a la sala.<br>
-                2. Localiza el objetivo en el plano cartesiano.<br>
-                3. Escribe las coordenadas y presiona <b>DISPARAR</b>.<br>
-                4. Tienes 2 minutos para acumular puntos y entrar al Top 10.
+            <h3>INSTRUCCIONES - 3 NIVELES</h3>
+            <p>El juego dura 3 minutos y tiene 3 fases:</p>
+            <p style="font-size: 13.5px;">
+                <b>⭐ NIVEL 1:</b> El objetivo se mueve. ¡Hazle CLICK encima!<br>
+                <b>⭐ NIVEL 2:</b> El objetivo se detiene. ¡Escribe sus coordenadas!<br>
+                <b>⭐ NIVEL 3:</b> El objetivo vuelve a moverse. ¡Escribe rápido!
             </p>
             
-            <!-- Demostración visual -->
             <div class="demo-contenedor">
                 <div class="demo-texto">
-                    <b>Formatos válidos:</b><br>
+                    <b>Para los Niveles 2 y 3:</b><br>
                     Usa " ; ", " , " o espacio.<br>
                     Ejemplos:<br>
                     <span style="color: #50C878;">3 ; -2</span> | <span style="color: #50C878;">3 , -2</span> | <span style="color: #50C878;">3 -2</span>
@@ -52,8 +51,8 @@
     <div id="pantalla-juego" style="display: none;">
         <div id="contenedor">
             <div id="cabecera-juego">
-                <h1>BACHILLERATO CAYETANO</h1>
-                <div id="panel-reloj">⏱️ 02:00</div>
+                <h1 id="titulo-juego">BACHILLERATO CAYETANO</h1>
+                <div id="panel-reloj">⏱️ 03:00</div>
             </div>
             
             <div id="contenedor-plano">
@@ -71,7 +70,6 @@
             </div>
         </div>
 
-        <!-- Tabla de Ranking Simétrica con Scroll -->
         <div id="contenedor-ranking">
             <h3>🏆 RANKING EN VIVO</h3>
             <ul id="listaRanking">
@@ -80,6 +78,6 @@
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="juego.js?v=24"></script>
+    <script src="juego.js?v=25"></script>
 </body>
 </html>
