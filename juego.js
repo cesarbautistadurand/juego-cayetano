@@ -3,9 +3,17 @@ const socket = io();
 const pantallaLogin = document.getElementById("pantalla-login");
 const inputNombre = document.getElementById("inputNombre");
 const btnEntrar = document.getElementById("btnEntrar");
+
+// Botones e IDs de Modal Instrucciones
 const btnInstrucciones = document.getElementById("btnInstrucciones");
 const modalInstrucciones = document.getElementById("modalInstrucciones");
 const cerrarModal = document.getElementById("cerrarModal");
+
+// Botones e IDs de Modal Historial
+const btnHistorial = document.getElementById("btnHistorial");
+const modalHistorial = document.getElementById("modalHistorial");
+const cerrarHistorial = document.getElementById("cerrarHistorial");
+const listaHistorialCompleta = document.getElementById("listaHistorialCompleta");
 
 const pantallaJuego = document.getElementById("pantalla-juego");
 const canvas = document.getElementById("plano");
@@ -34,13 +42,47 @@ let mascotaCargada = false;
 imgMascota.onload = () => { mascotaCargada = true; };
 imgMascota.src = 'mascota.png';
 
-btnInstrucciones.addEventListener("click", () => {
+// EVENTOS DE BOTONES (MODALES)
+btnInstrucciones.addEventListener("click", (e) => {
+    e.preventDefault();
     modalInstrucciones.style.display = "flex";
 });
 
-cerrarModal.addEventListener("click", () => {
+cerrarModal.addEventListener("click", (e) => {
+    e.preventDefault();
     modalInstrucciones.style.display = "none";
 });
+
+// ABRIR VENTANA DE HISTORIAL AL INSTANTE
+btnHistorial.addEventListener("click", (e) => {
+    e.preventDefault();
+    // Mostramos la ventana y el texto de carga de inmediato para dar respuesta visual
+    modalHistorial.style.display = "flex";
+    listaHistorialCompleta.innerHTML = "<p style='text-align:center; color:#FFF;'>Cargando puntajes...</p>";
+    // Solicitamos los datos al servidor
+    socket.emit('solicitarHistorial');
+});
+
+cerrarHistorial.addEventListener("click", (e) => {
+    e.preventDefault();
+    modalHistorial.style.display = "none";
+});
+
+// RECIBIR LOS DATOS DEL SERVIDOR Y ACTUALIZAR LA VENTANA
+socket.on('historialCompleto', (lista) => {
+    listaHistorialCompleta.innerHTML = "";
+    if (lista.length === 0) {
+        listaHistorialCompleta.innerHTML = "<p style='text-align:center; color:#FFF;'>Aún no hay puntajes registrados.</p>";
+    } else {
+        lista.forEach((j, index) => {
+            const li = document.createElement("li");
+            let medalla = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : `${index + 1}.`;
+            li.innerHTML = `${medalla} <b>${j.nombre}</b>: ${j.puntaje} pts`;
+            listaHistorialCompleta.appendChild(li);
+        });
+    }
+});
+
 
 function formatearTiempo(segundosTotales) {
     let minutos = Math.floor(segundosTotales / 60);
@@ -49,7 +91,6 @@ function formatearTiempo(segundosTotales) {
     return `0${minutos}:${formatoSegundos}`;
 }
 
-// MIRA TÁCTICA REDUCIDA
 function dibujarMira(targetCtx, x, y) {
     targetCtx.save();
     targetCtx.strokeStyle = "#00FF66"; 
@@ -75,7 +116,6 @@ function dibujarMira(targetCtx, x, y) {
     targetCtx.restore();
 }
 
-// ANIMACIÓN DE DEMOSTRACIÓN
 const demoCanvas = document.getElementById("demoCanvas");
 if (demoCanvas) {
     const dCtx = demoCanvas.getContext("2d");
@@ -131,7 +171,8 @@ function mostrarMensaje(texto, color) {
     mensajeTimer = setTimeout(() => { mensaje.style.opacity = "0"; }, 1100);
 }
 
-btnEntrar.addEventListener("click", () => {
+btnEntrar.addEventListener("click", (e) => {
+    e.preventDefault();
     const nombre = inputNombre.value.trim();
     if (nombre !== "") {
         miNombre = nombre;
@@ -199,9 +240,8 @@ function dibujarAlien(x, y) {
     dibujarMira(ctx, px, py);
 }
 
-// EVENTO DE CLICK (Para el Nivel 1)
 canvas.addEventListener('mousedown', (e) => {
-    if (nivelJuego !== 1) return; // Solo funciona en nivel 1
+    if (nivelJuego !== 1) return; 
 
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
@@ -210,19 +250,16 @@ canvas.addEventListener('mousedown', (e) => {
     const clickX = (e.clientX - rect.left) * scaleX;
     const clickY = (e.clientY - rect.top) * scaleY;
 
-    // Calcular posición real de la mascota en pixeles
     const alienPx = centroX + (alienX * escala);
     const alienPy = centroY - (alienY * escala);
 
-    // Distancia entre el click y el centro de la mascota
     const dist = Math.hypot(clickX - alienPx, clickY - alienPy);
 
-    if (dist < 28) { // Si hace click dentro del rango de la mascota
+    if (dist < 28) { 
         socket.emit('disparoClick', { x: alienX, y: alienY });
     }
 });
 
-// APLICAR CAMBIOS VISUALES AL CAMBIAR DE NIVEL
 function aplicarNivel(nivel) {
     nivelJuego = nivel;
     tituloJuego.innerText = `BACHILLERATO CAYETANO - NIVEL ${nivel}`;
@@ -248,7 +285,6 @@ function aplicarNivel(nivel) {
     }, 2500);
 }
 
-// SOCKETS DEL JUEGO
 socket.on('inicioCountdown', (segundos) => {
     dibujarPlano();
     controles.style.display = "none";
@@ -356,8 +392,8 @@ socket.on('actualizarRanking', (listaJugadores) => {
     });
 });
 
-// DISPARO POR TEXTO (Niveles 2 y 3)
-btnDisparar.addEventListener("click", () => {
+btnDisparar.addEventListener("click", (e) => {
+    e.preventDefault();
     let valores = inputCoords.value.match(/-?\d+/g);
     
     if(!valores || valores.length !== 2) {
