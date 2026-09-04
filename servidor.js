@@ -11,7 +11,7 @@ let alienY = 0;
 
 let estadoJuego = 'esperando'; 
 let segundosRestantes = 180;   // ⏱️ 3 MINUTOS DE JUEGO (60 seg por nivel)
-let segundosCountdown = 120;   // 2 minutos de espera en sala
+let segundosCountdown = 10;    // ⏱️ 10 SEGUNDOS de espera en sala
 let intervaloJuego = null;
 let intervaloCountdown = null;
 let timerMovimiento = null;
@@ -47,7 +47,7 @@ function reiniciarTimerMovimiento(nivel) {
 
 function iniciarCountdown() {
     estadoJuego = 'countdown';
-    segundosCountdown = 120; 
+    segundosCountdown = 10; // ⏱️ 10 segundos antes de empezar
 
     for (let id in jugadores) {
         jugadores[id].puntaje = 0;
