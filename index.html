@@ -15,9 +15,9 @@
         <h2>Bachillerato Cayetano</h2>
         <p>Ingresa tu nombre para iniciar la partida:</p>
         <input type="text" id="inputNombre" placeholder="Tu nombre">
-        <button id="btnEntrar">ENTRAR AL JUEGO</button>
-        <button id="btnHistorial">🏆 VER TOP HISTÓRICO</button>
-        <button id="btnInstrucciones">📖 ¿CÓMO JUGAR?</button>
+        <button id="btnEntrar" type="button">ENTRAR AL JUEGO</button>
+        <button id="btnHistorial" type="button">🏆 VER TOP HISTÓRICO</button>
+        <button id="btnInstrucciones" type="button">📖 ¿CÓMO JUGAR?</button>
         
         <div id="autor-credito">Creado por César Bautista Durand</div>
     </div>
@@ -43,7 +43,7 @@
                 <canvas id="demoCanvas" width="260" height="200" style="width: 130px; height: 100px;"></canvas>
             </div>
 
-            <button id="cerrarModal">ENTENDIDO</button>
+            <button id="cerrarModal" type="button">ENTENDIDO</button>
         </div>
     </div>
 
@@ -55,7 +55,7 @@
             <ul id="listaHistorialCompleta">
                 <!-- Se llenará dinámicamente -->
             </ul>
-            <button id="cerrarHistorial">CERRAR</button>
+            <button id="cerrarHistorial" type="button">CERRAR</button>
         </div>
     </div>
 
@@ -78,7 +78,7 @@
             
             <div id="controles">
                 <input type="text" id="inputCoordenadas" placeholder="Ej: 3;-2">
-                <button id="btnDisparar">DISPARAR</button>
+                <button id="btnDisparar" type="button">DISPARAR</button>
             </div>
         </div>
 
@@ -90,6 +90,6 @@
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="juego.js?v=27"></script>
+    <script src="juego.js?v=28"></script>
 </body>
 </html>
