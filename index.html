@@ -16,9 +16,9 @@
         <p>Ingresa tu nombre para iniciar la partida:</p>
         <input type="text" id="inputNombre" placeholder="Tu nombre">
         <button id="btnEntrar">ENTRAR AL JUEGO</button>
+        <button id="btnHistorial">🏆 VER TOP HISTÓRICO</button>
         <button id="btnInstrucciones">📖 ¿CÓMO JUGAR?</button>
         
-        <!-- Créditos de autoría -->
         <div id="autor-credito">Creado por César Bautista Durand</div>
     </div>
 
@@ -47,6 +47,18 @@
         </div>
     </div>
 
+    <!-- MODAL DEL TOP HISTÓRICO SEMANAL -->
+    <div id="modalHistorial" class="modal">
+        <div class="contenido-modal" style="max-width: 350px;">
+            <h3>🏆 TOP HISTÓRICO 🏆</h3>
+            <p style="text-align: center; font-size: 13px; margin-top: -10px;">Puntajes acumulados de la semana</p>
+            <ul id="listaHistorialCompleta">
+                <!-- Se llenará dinámicamente -->
+            </ul>
+            <button id="cerrarHistorial">CERRAR</button>
+        </div>
+    </div>
+
     <!-- PANTALLA 2: El Juego -->
     <div id="pantalla-juego" style="display: none;">
         <div id="contenedor">
@@ -71,13 +83,13 @@
         </div>
 
         <div id="contenedor-ranking">
-            <h3>🏆 RANKING EN VIVO</h3>
+            <h3>🏆 TOP HISTÓRICO</h3>
             <ul id="listaRanking">
             </ul>
         </div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="juego.js?v=25"></script>
+    <script src="juego.js?v=27"></script>
 </body>
 </html>
