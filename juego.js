@@ -10,6 +10,7 @@ const cerrarModal = document.getElementById("cerrarModal");
 const pantallaJuego = document.getElementById("pantalla-juego");
 const canvas = document.getElementById("plano");
 const ctx = canvas.getContext("2d");
+const controles = document.getElementById("controles");
 const inputCoords = document.getElementById("inputCoordenadas");
 const btnDisparar = document.getElementById("btnDisparar");
 const mensaje = document.getElementById("mensaje");
@@ -17,6 +18,7 @@ const listaRanking = document.getElementById("listaRanking");
 const alertaCentral = document.getElementById("alerta-central");
 const textoAlerta = document.getElementById("texto-alerta");
 const reloj = document.getElementById("panel-reloj");
+const tituloJuego = document.getElementById("titulo-juego");
 
 const centroX = canvas.width / 2;
 const centroY = canvas.height / 2;
@@ -25,6 +27,7 @@ let alienX = 0;
 let alienY = 0;
 let miNombre = "";
 let mensajeTimer; 
+let nivelJuego = 1;
 
 const imgMascota = new Image();
 let mascotaCargada = false;
@@ -46,7 +49,7 @@ function formatearTiempo(segundosTotales) {
     return `0${minutos}:${formatoSegundos}`;
 }
 
-// MIRA TÁCTICA REDUCIDA Y PROPORCIONAL
+// MIRA TÁCTICA REDUCIDA
 function dibujarMira(targetCtx, x, y) {
     targetCtx.save();
     targetCtx.strokeStyle = "#00FF66"; 
@@ -72,7 +75,7 @@ function dibujarMira(targetCtx, x, y) {
     targetCtx.restore();
 }
 
-// ANIMACIÓN DE DEMOSTRACIÓN NÍTIDA
+// ANIMACIÓN DE DEMOSTRACIÓN
 const demoCanvas = document.getElementById("demoCanvas");
 if (demoCanvas) {
     const dCtx = demoCanvas.getContext("2d");
@@ -81,7 +84,6 @@ if (demoCanvas) {
     function animarDemo() {
         if (modalInstrucciones.style.display === "flex") {
             dCtx.clearRect(0, 0, 130, 100);
-            
             const dcx = 130 / 2; 
             const dcy = 100 / 2; 
 
@@ -99,7 +101,6 @@ if (demoCanvas) {
             let escalaDemo = 14;
             let px = dcx + (demoX * escalaDemo);
             let py = dcy - (demoY * escalaDemo);
-
             let tamañoDemo = 32;
 
             if (mascotaCargada) {
@@ -198,8 +199,60 @@ function dibujarAlien(x, y) {
     dibujarMira(ctx, px, py);
 }
 
+// EVENTO DE CLICK (Para el Nivel 1)
+canvas.addEventListener('mousedown', (e) => {
+    if (nivelJuego !== 1) return; // Solo funciona en nivel 1
+
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
+    const clickX = (e.clientX - rect.left) * scaleX;
+    const clickY = (e.clientY - rect.top) * scaleY;
+
+    // Calcular posición real de la mascota en pixeles
+    const alienPx = centroX + (alienX * escala);
+    const alienPy = centroY - (alienY * escala);
+
+    // Distancia entre el click y el centro de la mascota
+    const dist = Math.hypot(clickX - alienPx, clickY - alienPy);
+
+    if (dist < 28) { // Si hace click dentro del rango de la mascota
+        socket.emit('disparoClick', { x: alienX, y: alienY });
+    }
+});
+
+// APLICAR CAMBIOS VISUALES AL CAMBIAR DE NIVEL
+function aplicarNivel(nivel) {
+    nivelJuego = nivel;
+    tituloJuego.innerText = `BACHILLERATO CAYETANO - NIVEL ${nivel}`;
+
+    if(nivel === 1) {
+        controles.style.display = "none";
+        textoAlerta.innerHTML = `⭐ NIVEL 1 ⭐<br><span style="font-size:22px; color:#FFFFFF;">¡Haz click rápido sobre la mascota!</span>`;
+    } else if (nivel === 2) {
+        controles.style.display = "flex";
+        inputCoords.value = "";
+        inputCoords.focus();
+        textoAlerta.innerHTML = `⭐ NIVEL 2 ⭐<br><span style="font-size:22px; color:#FFFFFF;">¡Escribe las coordenadas exactas!</span>`;
+    } else if (nivel === 3) {
+        controles.style.display = "flex";
+        inputCoords.value = "";
+        inputCoords.focus();
+        textoAlerta.innerHTML = `⭐ NIVEL 3 ⭐<br><span style="font-size:22px; color:#FFFFFF;">¡Cuidado! Ahora la mascota se mueve.</span>`;
+    }
+    
+    alertaCentral.style.display = "flex";
+    setTimeout(() => {
+        alertaCentral.style.display = "none";
+    }, 2500);
+}
+
+// SOCKETS DEL JUEGO
 socket.on('inicioCountdown', (segundos) => {
     dibujarPlano();
+    controles.style.display = "none";
+    tituloJuego.innerText = `BACHILLERATO CAYETANO`;
     textoAlerta.innerHTML = `⚠️ PREPÁRENSE<br><span style="font-size: 45px; color: #F7B232;">${formatearTiempo(segundos)}</span>`;
     alertaCentral.style.display = "flex";
 });
@@ -210,19 +263,28 @@ socket.on('actualizarCountdown', (segundos) => {
         alertaCentral.style.display = "flex";
     } else {
         textoAlerta.innerHTML = `<span style="font-size: 35px; color: #50C878;">¡INICIAR PARTIDA!</span>`;
-        setTimeout(() => {
-            alertaCentral.style.display = "none";
-        }, 800);
+        setTimeout(() => { alertaCentral.style.display = "none"; }, 800);
     }
 });
 
-socket.on('comenzarPartida', (coordenadas) => {
-    alienX = coordenadas.x;
-    alienY = coordenadas.y;
+socket.on('comenzarPartida', (datos) => {
+    alienX = datos.x;
+    alienY = datos.y;
     alertaCentral.style.display = "none";
     dibujarPlano();
     dibujarAlien(alienX, alienY);
-    mostrarMensaje("¡Objetivo detectado! ¡Apunta rápido!", "#FFFFFF");
+    aplicarNivel(datos.nivel);
+});
+
+socket.on('cambioNivel', (nuevoNivel) => {
+    aplicarNivel(nuevoNivel);
+});
+
+socket.on('movimientoAutomatico', (coords) => {
+    alienX = coords.x;
+    alienY = coords.y;
+    dibujarPlano();
+    dibujarAlien(alienX, alienY);
 });
 
 socket.on('actualizarReloj', (segundosRestantes) => {
@@ -253,6 +315,8 @@ socket.on('impactoCorrecto', (datos) => {
 });
 
 socket.on('finPartida', (datos) => {
+    controles.style.display = "none";
+    tituloJuego.innerText = `BACHILLERATO CAYETANO`;
     let podiumHtml = `🏆 ¡FIN DE LA PARTIDA! 🏆<br><br><span style="font-size:18px; color:#F7B232;">GANADORES</span><br><div style="font-size:13px; text-align:left; display:inline-block; margin-top:5px; line-height:1.4; max-height:220px; overflow-y:auto; padding:0 10px;">`;
     
     if (datos.ranking && datos.ranking.length > 0) {
@@ -292,6 +356,7 @@ socket.on('actualizarRanking', (listaJugadores) => {
     });
 });
 
+// DISPARO POR TEXTO (Niveles 2 y 3)
 btnDisparar.addEventListener("click", () => {
     let valores = inputCoords.value.match(/-?\d+/g);
     
