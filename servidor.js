@@ -2,16 +2,35 @@ const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
+const fs = require('fs'); // Módulo para leer y escribir archivos
+const path = './historial.json';
 
 app.use(express.static(__dirname));
+
+let historialPuntajes = {}; 
+
+// CARGAR EL HISTORIAL GUARDADO AL INICIAR EL SERVIDOR
+if (fs.existsSync(path)) {
+    try {
+        const datos = fs.readFileSync(path, 'utf8');
+        historialPuntajes = JSON.parse(datos);
+    } catch (error) {
+        console.error("Error al leer el historial:", error);
+    }
+}
+
+// FUNCIÓN PARA GUARDAR LOS PUNTOS PERMANENTEMENTE
+function guardarHistorial() {
+    fs.writeFileSync(path, JSON.stringify(historialPuntajes, null, 2));
+}
 
 let jugadores = {}; 
 let alienX = 0;
 let alienY = 0;
 
 let estadoJuego = 'esperando'; 
-let segundosRestantes = 180;   // ⏱️ 3 MINUTOS DE JUEGO (60 seg por nivel)
-let segundosCountdown = 10;    // ⏱️ 10 SEGUNDOS de espera en sala
+let segundosRestantes = 180;   
+let segundosCountdown = 10;    
 let intervaloJuego = null;
 let intervaloCountdown = null;
 let timerMovimiento = null;
@@ -24,17 +43,16 @@ function generarAlien() {
 }
 
 function enviarRanking() {
-    let listaOrdenada = Object.values(jugadores).sort((a, b) => b.puntaje - a.puntaje);
+    let listaOrdenada = Object.values(historialPuntajes).sort((a, b) => b.puntaje - a.puntaje);
     io.emit('actualizarRanking', listaOrdenada);
 }
 
-// LÓGICA DE MOVIMIENTO AUTOMÁTICO SEGÚN EL NIVEL
 function reiniciarTimerMovimiento(nivel) {
     if(timerMovimiento) clearTimeout(timerMovimiento);
     
     let tiempo = 0;
-    if(nivel === 1) tiempo = 2000; // Nivel 1: Se mueve cada 2 segundos (rápido para clicks)
-    if(nivel === 3) tiempo = 5000; // Nivel 3: Se mueve cada 5 segundos (da tiempo a escribir)
+    if(nivel === 1) tiempo = 2000; 
+    if(nivel === 3) tiempo = 5000; 
 
     if(tiempo > 0 && estadoJuego === 'jugando') {
         timerMovimiento = setTimeout(() => {
@@ -47,13 +65,8 @@ function reiniciarTimerMovimiento(nivel) {
 
 function iniciarCountdown() {
     estadoJuego = 'countdown';
-    segundosCountdown = 10; // ⏱️ 10 segundos antes de empezar
-
-    for (let id in jugadores) {
-        jugadores[id].puntaje = 0;
-    }
+    segundosCountdown = 10; 
     enviarRanking();
-
     io.emit('inicioCountdown', segundosCountdown);
 
     if (intervaloCountdown) clearInterval(intervaloCountdown);
@@ -70,7 +83,7 @@ function iniciarCountdown() {
 
 function iniciarJuego() {
     estadoJuego = 'jugando';
-    segundosRestantes = 180; // 3 MINUTOS
+    segundosRestantes = 180; 
     nivelActual = 1;
     generarAlien();
     
@@ -81,7 +94,6 @@ function iniciarJuego() {
     intervaloJuego = setInterval(() => {
         segundosRestantes--;
         
-        // CONTROL DE NIVELES POR TIEMPO
         let nuevoNivel = 1;
         if(segundosRestantes <= 120 && segundosRestantes > 60) nuevoNivel = 2;
         if(segundosRestantes <= 60) nuevoNivel = 3;
@@ -104,7 +116,7 @@ function iniciarJuego() {
 
 function finalizarJuego() {
     estadoJuego = 'terminado';
-    let listaOrdenada = Object.values(jugadores).sort((a, b) => b.puntaje - a.puntaje);
+    let listaOrdenada = Object.values(historialPuntajes).sort((a, b) => b.puntaje - a.puntaje);
     
     io.emit('finPartida', { ranking: listaOrdenada.slice(0, 10) });
 
@@ -114,13 +126,26 @@ function finalizarJuego() {
         } else {
             estadoJuego = 'esperando';
         }
-    }, 60000); // 1 minuto de podio
+    }, 60000); 
 }
 
 io.on('connection', (socket) => {
+
+    // NUEVO: Enviar historial completo a quien lo solicite desde el menú
+    socket.on('solicitarHistorial', () => {
+        let listaOrdenada = Object.values(historialPuntajes).sort((a, b) => b.puntaje - a.puntaje);
+        socket.emit('historialCompleto', listaOrdenada);
+    });
     
     socket.on('registrarJugador', (nombreAlumno) => {
-        jugadores[socket.id] = { nombre: nombreAlumno, puntaje: 0 };
+        let key = nombreAlumno.trim().toUpperCase(); 
+        
+        if (!historialPuntajes[key]) {
+            historialPuntajes[key] = { nombre: nombreAlumno.trim(), puntaje: 0 };
+            guardarHistorial(); // Guardamos el nuevo usuario
+        }
+        
+        jugadores[socket.id] = key;
         enviarRanking();
 
         if (estadoJuego === 'esperando') {
@@ -130,21 +155,24 @@ io.on('connection', (socket) => {
         } else if (estadoJuego === 'jugando') {
             socket.emit('comenzarPartida', { x: alienX, y: alienY, nivel: nivelActual });
         } else if (estadoJuego === 'terminado') {
-            socket.emit('actualizarRanking', Object.values(jugadores).sort((a, b) => b.puntaje - a.puntaje));
+            socket.emit('actualizarRanking', Object.values(historialPuntajes).sort((a, b) => b.puntaje - a.puntaje));
         }
     });
 
-    // Validar CLICKS (Solo válidos en Nivel 1)
     socket.on('disparoClick', (intento) => {
         if (!jugadores[socket.id] || estadoJuego !== 'jugando' || nivelActual !== 1) return;
 
+        let key = jugadores[socket.id];
+
         if (intento.x === alienX && intento.y === alienY) {
-            jugadores[socket.id].puntaje += 100;
+            historialPuntajes[key].puntaje += 100;
+            guardarHistorial(); // Guardamos los puntos al instante
+
             generarAlien();
             reiniciarTimerMovimiento(nivelActual);
             
             io.emit('impactoCorrecto', { 
-                nombreGanador: jugadores[socket.id].nombre,
+                nombreGanador: historialPuntajes[key].nombre,
                 nuevoX: alienX, 
                 nuevoY: alienY 
             });
@@ -152,17 +180,20 @@ io.on('connection', (socket) => {
         }
     });
 
-    // Validar TEXTO (Solo válidos en Nivel 2 y 3)
     socket.on('disparo', (intento) => {
         if (!jugadores[socket.id] || estadoJuego !== 'jugando' || nivelActual === 1) return;
 
+        let key = jugadores[socket.id];
+
         if (intento.x === alienX && intento.y === alienY) {
-            jugadores[socket.id].puntaje += 100;
+            historialPuntajes[key].puntaje += 100;
+            guardarHistorial(); // Guardamos los puntos al instante
+
             generarAlien();
             reiniciarTimerMovimiento(nivelActual);
             
             io.emit('impactoCorrecto', { 
-                nombreGanador: jugadores[socket.id].nombre,
+                nombreGanador: historialPuntajes[key].nombre,
                 nuevoX: alienX, 
                 nuevoY: alienY 
             });
@@ -175,7 +206,7 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         if(jugadores[socket.id]) {
             delete jugadores[socket.id];
-            enviarRanking();
+            
             if (Object.keys(jugadores).length === 0) {
                 if (intervaloCountdown) clearInterval(intervaloCountdown);
                 if (intervaloJuego) clearInterval(intervaloJuego);
